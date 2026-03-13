@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Majlis App - Info Kajian, Event & Khataman</title>
+
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Desktop Sidebar Sidebar / Topbar container -->
+    <nav class="desktop-nav">
+        <div class="logo">
+            <i class="fa-solid fa-mosque"></i>
+            <span>MajlisApp</span>
+        </div>
+        <ul class="nav-links">
+            <li class="nav-item active" data-target="home">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </li>
+            <li class="nav-item" data-target="kajian">
+                <i class="fa-solid fa-book-open"></i>
+                <span>Kajian</span>
+            </li>
+            <li class="nav-item" data-target="event">
+                <i class="fa-solid fa-calendar-days"></i>
+                <span>Event</span>
+            </li>
+            <li class="nav-item" data-target="khataman">
+                <i class="fa-solid fa-quran"></i>
+                <span>Khataman</span>
+            </li>
+            <li class="nav-item admin-only" data-target="datamaster"
+                style="margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+                <i class="fa-solid fa-users-gear" style="color:var(--primary);"></i>
+                <span style="color:var(--primary); font-weight: 600;">Data Master</span>
+            </li>
+            <!-- Theme Toggle Desktop -->
+            <li class="nav-item" onclick="toggleTheme()" style="margin-top: 10px;">
+                <i id="theme-icon-desktop" class="fa-solid fa-moon"></i>
+                <span id="theme-text-desktop">Mode Gelap</span>
+            </li>
+        </ul>
+        <button id="desktop-logout-btn" class="btn-action btn-logout" onclick="logout()"
+            style="margin-top:auto; width: 100%; justify-content:center; padding: 12px;">
+            <i class="fa-solid fa-right-from-bracket"></i> Keluar
+        </button>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="content-area">
+        <!-- Topbar mobile (only visible on mobile) -->
+        <header class="mobile-header">
+            <div class="logo">
+                <i class="fa-solid fa-mosque"></i>
+                <span>Mt. Hudurissyifa</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 15px; margin-left: auto;">
+                <button id="theme-toggle-mobile" onclick="toggleTheme()"
+                    style="background:none; border:none; font-size: 1.2rem; color: var(--primary); cursor:pointer;">
+                    <i id="theme-icon-mobile" class="fa-solid fa-moon"></i>
+                </button>
+                <button id="mobile-logout-btn" class="btn-action btn-logout" onclick="logout()">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Container for dynamic views -->
+        <div id="app-container">
+
+            <!-- SECTION: HOME -->
+            <section id="home" class="view-section active-section">
+                <div class="hero-card">
+                    <div class="hero-content">
+                        <h2 id="welcome-text">Ahlan Wasahlan, <br><span id="user-display-name">Banaat
+                                Hudurissyifa</span></h2>
+                        <p>Temukan kedamaian melalui ilmu dan silaturahmi di Majlis ini.</p>
+                        <p class="date-today" id="current-date">Senin, 10 Muharram 1446 H</p>
+                    </div>
+                    <div class="hero-overlay"></div>
+                </div>
+
+                <div class="quick-stats">
+                    <div class="stat-card" data-target="kajian" onclick="navigateTo('kajian')">
+                        <div class="icon-wrapper green-light">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Kajian</h3>
+                            <p id="stat-kajian-text">Memuat...</p>
+                        </div>
+                    </div>
+                    <div class="stat-card" data-target="event" onclick="navigateTo('event')">
+                        <div class="icon-wrapper orange-light">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Event</h3>
+                            <p id="stat-event-text">Memuat...</p>
+                        </div>
+                    </div>
+                    <div class="stat-card" data-target="khataman" onclick="navigateTo('khataman')">
+                        <div class="icon-wrapper blue-light">
+                            <i class="fa-solid fa-quran"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Khataman</h3>
+                            <p id="stat-khataman-text">Memuat...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Action for Admin -->
+                <div class="admin-only" style="margin-bottom: 30px;">
+                    <div class="section-heading">
+                        <h3>Akses Cepat (Admin)</h3>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                        <button class="btn-action" onclick="openKajianModal()"
+                            style="padding: 12px; justify-content: center; background: var(--accent); color: var(--primary);">
+                            <i class="fa-solid fa-calendar-plus"></i> Tambah Kajian
+                        </button>
+                        <button class="btn-action superadmin-only" onclick="openEventModal()"
+                            style="padding: 12px; justify-content: center; background: #FFF4E5; color: #E67E22;">
+                            <i class="fa-solid fa-calendar-check"></i> Tambah Event
+                        </button>
+                    </div>
+                </div>
+
+                <div class="section-heading">
+                    <h3>Kajian Terdekat</h3>
+                    <a href="#" onclick="navigateTo('kajian')">Lihat Semua</a>
+                </div>
+
+                <!-- Skeleton loader for Kajian Home -->
+                <div id="recent-kajian-container" class="scroll-container">
+                    <div class="skeleton-card"></div>
+                    <div class="skeleton-card"></div>
+                </div>
+            </section>
+
+            <!-- SECTION: KAJIAN -->
+            <section id="kajian" class="view-section">
+                <div class="page-header" style="display: flex; justify-content: space-between; align-items: start;">
+                    <div>
+                        <h2>Jadwal Kajian</h2>
+                        <p>Dipersilakan hadir untuk umum (khusus Akhwat/Muslimah)</p>
+                    </div>
+                    <button class="btn-action admin-only" onclick="openKajianModal()"><i class="fa-solid fa-plus"></i>
+                        Tambah</button>
+                </div>
+
+                <div class="filter-tabs" id="kajian-filter-tabs">
+                    <button class="filter-btn filter-all active" data-filter="all">Semua</button>
+                    <button class="filter-btn filter-week" data-filter="week">Minggu Ini</button>
+                    <button class="filter-btn filter-month" data-filter="month">Bulan Ini</button>
+                </div>
+
+                <div id="kajian-list" class="list-container">
+                    <!-- Cards will be injected by JS -->
+                    <div class="skeleton-card horizontal"></div>
+                    <div class="skeleton-card horizontal"></div>
+                    <div class="skeleton-card horizontal"></div>
+                </div>
+            </section>
+
+            <!-- SECTION: EVENT -->
+            <section id="event" class="view-section">
+                <div class="page-header" style="display: flex; justify-content: space-between; align-items: start;">
+                    <div>
+                        <h2>Daftar Event Spesial</h2>
+                        <p>Ikuti berbagai kegiatan sosial & perayaan hari besar</p>
+                    </div>
+                    <button class="btn-action superadmin-only" onclick="openEventModal()"><i
+                            class="fa-solid fa-plus"></i> Buat Event</button>
+                </div>
+
+                <div id="event-list" class="grid-container">
+                    <!-- Cards will be injected by JS -->
+                    <div class="skeleton-card large"></div>
+                    <div class="skeleton-card large"></div>
+                </div>
+            </section>
+
+            <!-- SECTION: KHATAMAN -->
+            <section id="khataman" class="view-section">
+                <div class="page-header center">
+                    <div class="quran-icon">
+                        <i class="fa-solid fa-book-quran"></i>
+                    </div>
+                    <h2>Progress Khataman</h2>
+                    <p>Program tilawah pekanan jamaah</p>
+                </div>
+
+                <div class="progress-container glass-card">
+                    <div class="progress-header">
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <h3 id="khataman-current-title">Khataman Putaran #12</h3>
+                                <button class="btn-icon admin-only" onclick="openKhatamanTitleModal()"
+                                    title="Edit Judul">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                            </div>
+                            <div id="khataman-phase-badge-container">
+                                <span class="badge" id="khataman-phase-badge"
+                                    style="background: var(--primary-light); color: var(--primary);">Memuat
+                                    Sesi...</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <button class="btn-action admin-only" id="btn-toggle-phase" onclick="toggleKhatamanPhase()"
+                                style="background: var(--primary); color: white; padding: 6px 12px; font-size: 0.75rem;">
+                                <i class="fa-solid fa-toggle-on"></i> Tutup Sesi
+                            </button>
+                            <button class="btn-action" onclick="openKhatamanHistoryModal()"
+                                style="background: #E8F0FE; color: #1A73E8; padding: 6px 12px; font-size: 0.75rem;">
+                                <i class="fa-solid fa-clock-rotate-left"></i> Riwayat
+                            </button>
+                        </div>
+                    </div>
+                    <div class="progress-bar-wrapper">
+                        <div class="progress-fill" id="khataman-progress-fill" style="width: 0%;"></div>
+                    </div>
+                    <p class="progress-text" id="khataman-progress-text">Memuat progress...</p>
+                </div>
+
+                <div class="juz-grid" id="juz-list">
+                    <!-- Grid items injected by JS -->
+                </div>
+
+                <!-- Container for Archive button (Admin only) -->
+                <div id="khataman-archive-container" class="admin-only" style="margin-top: 20px;"></div>
+            </section>
+
+            <!-- SECTION: DATA MASTER (Admin/Superadmin Only) -->
+            <section id="datamaster" class="view-section admin-only">
+                <div class="page-header" style="display: flex; justify-content: space-between; align-items: start;">
+                    <div>
+                        <h2>Data Banaat</h2>
+                        <p>Kelola data anggota majlis</p>
+                    </div>
+                    <button class="btn-action" onclick="openJamaahModal()"><i class="fa-solid fa-user-plus"></i>
+                        Tambah</button>
+                </div>
+
+                <!-- Search & Filter Tab -->
+                <div class="input-group" style="margin-bottom: 20px;">
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="search-jamaah" placeholder="Cari nama banaat..."
+                            onkeyup="filterJamaah()">
+                    </div>
+                </div>
+
+                <!-- List of Jamaah -->
+                <div id="jamaah-list" class="list-container">
+                    <!-- Cards injected by JS -->
+                    <div class="skeleton-card horizontal"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Modal Form Tambah/Edit Jamaah -->
+    <div id="jamaah-modal" class="modal-overlay">
+        <!-- ... existing jamaah modal content ... -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Tambah Jamaah</h3>
+                <button class="btn-close" onclick="closeJamaahModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="jamaah-form">
+                <input type="hidden" id="jamaah-id">
+
+                <div class="input-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" id="jamaah-name" class="form-input" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Nomor Telepon (WA)</label>
+                    <input type="tel" id="jamaah-phone" class="form-input" placeholder="Mis: 08123456789" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Alamat Info singkat</label>
+                    <input type="text" id="jamaah-address" class="form-input" placeholder="Nama Jalan / Cluster">
+                </div>
+
+                <div style="border-top: 1px solid #eee; margin: 15px 0 10px; padding-top: 10px;">
+                    <h4 style="font-size: 0.9rem; color: var(--primary); margin-bottom: 10px;">Akun Login</h4>
+                </div>
+
+                <div class="input-group">
+                    <label>Username</label>
+                    <input type="text" id="jamaah-username" class="form-input" placeholder="username" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="jamaah-password" class="form-input" placeholder="password" required>
+                </div>
+
+                <div class="input-group superadmin-only">
+                    <label>Role</label>
+                    <select id="jamaah-role" class="form-input">
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                        <option value="superadmin">Superadmin</option>
+                    </select>
+                </div>
+
+                <div class="input-group"
+                    style="display:flex; justify-content:end; gap: 10px; margin-top:20px; margin-bottom: 0;">
+                    <button type="button" class="btn-action" style="background:#FFF4E5; color:#E67E22;"
+                        onclick="closeJamaahModal()">Batal</button>
+                    <button type="submit" class="btn-primary" id="btn-save-jamaah"
+                        style="padding: 10px 20px;">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Form Tambah/Edit Kajian -->
+    <div id="kajian-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="kajian-modal-title">Tambah Jadwal Kajian</h3>
+                <button class="btn-close" onclick="closeKajianModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="kajian-form">
+                <input type="hidden" id="kajian-id">
+
+                <div class="input-group">
+                    <label>Judul Kajian</label>
+                    <input type="text" id="kajian-title" class="form-input" required
+                        placeholder="Mis: Kajian Kitab Fiqih">
+                </div>
+
+                <div class="input-group">
+                    <label>Nama Ustadz</label>
+                    <input type="text" id="kajian-ustadz" class="form-input" required placeholder="Nama Lengkap Ustadz">
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Tanggal</label>
+                        <input type="date" id="kajian-date" class="form-input" required
+                            onclick="try { this.showPicker(); } catch(e) {}"
+                            onfocus="try { this.showPicker(); } catch(e) {}">
+                    </div>
+                    <div class="input-group" style="flex: 1;">
+                        <label>Jam / Waktu</label>
+                        <select id="kajian-time-select" class="form-input" required onchange="handleKajianTimeChange()">
+                            <option value="">-- Pilih Waktu --</option>
+                            <option value="Ba'da Shubuh">Ba'da Shubuh</option>
+                            <option value="Ba'da Dzuhur">Ba'da Dzuhur</option>
+                            <option value="Ba'da Ashar">Ba'da Ashar</option>
+                            <option value="Ba'da Maghrib">Ba'da Maghrib</option>
+                            <option value="Ba'da Isya">Ba'da Isya</option>
+                            <option value="custom">Lainnya...</option>
+                        </select>
+                        <input type="text" id="kajian-time-custom" class="form-input" placeholder="Tulis waktu, mis: 09:00 WIB"
+                            style="display:none; margin-top:8px;">
+                        <input type="hidden" id="kajian-time">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Tipe Kajian</label>
+                    <select id="kajian-type" class="form-input" required>
+                        <option value="rutin">Kajian Rutin</option>
+                        <option value="tabligh">Tabligh Akbar</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Lokasi (Nama Tempat)</label>
+                    <input type="text" id="kajian-location" class="form-input"
+                        placeholder="Mis: Masjid Al-Ikhlas / Lantai 2">
+                </div>
+
+                <div class="input-group">
+                    <label>Link Google Maps (URL)</label>
+                    <input type="url" id="kajian-map-url" class="form-input" placeholder="https://maps.app.goo.gl/...">
+                </div>
+
+                <div class="input-group"
+                    style="display:flex; justify-content:end; gap: 10px; margin-top:20px; margin-bottom: 0;">
+                    <button type="button" class="btn-action" style="background:#FFF4E5; color:#E67E22;"
+                        onclick="closeKajianModal()">Batal</button>
+                    <button type="submit" class="btn-primary" id="btn-save-kajian"
+                        style="padding: 10px 20px;">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Form Tambah/Edit Event -->
+    <div id="event-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="event-modal-title">Tambah Event Spesial</h3>
+                <button class="btn-close" onclick="closeEventModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="event-form">
+                <input type="hidden" id="event-id">
+
+                <div class="input-group">
+                    <label>Judul Event</label>
+                    <input type="text" id="event-title" class="form-input" required
+                        placeholder="Mis: Khataman Akbar 2024">
+                </div>
+
+                <div class="input-group">
+                    <label>Tanggal Pelaksanaan</label>
+                    <input type="date" id="event-date" class="form-input" required
+                        onclick="try { this.showPicker(); } catch(e) {}"
+                        onfocus="try { this.showPicker(); } catch(e) {}">
+                </div>
+
+                <div class="input-group">
+                    <label>Deskripsi Singkat</label>
+                    <textarea id="event-desc" class="form-input" rows="3"
+                        placeholder="Jelaskan detail event..."></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label>URL Gambar/Poster</label>
+                    <input type="url" id="event-image" class="form-input"
+                        placeholder="https://link-gambar.jpg (Opsional)">
+                </div>
+
+                <div class="input-group">
+                    <label>Lokasi (Nama Tempat)</label>
+                    <input type="text" id="event-location" class="form-input"
+                        placeholder="Mis: Masjid Al-Ikhlas / Aula Lantai 2">
+                </div>
+
+                <div class="input-group">
+                    <label>Link Google Maps (URL)</label>
+                    <input type="url" id="event-map-url" class="form-input"
+                        placeholder="https://maps.app.goo.gl/... (Opsional)">
+                </div>
+
+                <div class="input-group"
+                    style="display:flex; justify-content:end; gap: 10px; margin-top:20px; margin-bottom: 0;">
+                    <button type="button" class="btn-action" style="background:#FFF4E5; color:#E67E22;"
+                        onclick="closeEventModal()">Batal</button>
+                    <button type="submit" class="btn-primary" id="btn-save-event"
+                        style="padding: 10px 20px;">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-nav">
+        <div class="nav-item active" data-target="home">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </div>
+        <div class="nav-item" data-target="kajian">
+            <i class="fa-solid fa-book-open"></i>
+            <span>Kajian</span>
+        </div>
+        <div class="nav-item" data-target="event">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>Event</span>
+        </div>
+        <div class="nav-item" data-target="khataman">
+            <i class="fa-solid fa-quran"></i>
+            <span>Khataman</span>
+        </div>
+        <div class="nav-item admin-only" data-target="datamaster">
+            <i class="fa-solid fa-users-gear"></i>
+            <span>Data</span>
+        </div>
+    </nav>
+
+    <!-- Modal Edit Judul Khataman -->
+    <div id="khataman-title-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Judul Khataman</h3>
+                <button class="btn-close" onclick="closeKhatamanTitleModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="khataman-title-form">
+                <div class="input-group">
+                    <label>Judul Putaran Khataman</label>
+                    <input type="text" id="khataman-title-input" class="form-input" required
+                        placeholder="Mis: Khataman Putaran #13">
+                </div>
+                <div class="input-group"
+                    style="display:flex; justify-content:end; gap: 10px; margin-top:20px; margin-bottom: 0;">
+                    <button type="button" class="btn-action" style="background:#FFF4E5; color:#E67E22;"
+                        onclick="closeKhatamanTitleModal()">Batal</button>
+                    <button type="submit" class="btn-primary" id="btn-save-khataman-title"
+                        style="padding: 10px 20px;">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Riwayat Khataman -->
+    <div id="khataman-history-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3>Riwayat Khataman</h3>
+                <button class="btn-close" onclick="closeKhatamanHistoryModal()"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="khataman-history-content" class="list-container"
+                style="max-height: 400px; overflow-y: auto; padding-right: 5px;">
+                <!-- History items will be injected by JS -->
+                <p style="text-align:center; color: var(--text-muted); padding: 20px;">Memuat data riwayat...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script for Logic via Google Sheets -->
+    <script src="script.js"></script>
+</body>
+
+</html>

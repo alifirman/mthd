@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Mt. Hudurissyifa</title>
+
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="login-body">
+
+    <div class="login-wrapper">
+        <div class="login-glass-card">
+            <div class="login-header">
+                <div class="login-logo">
+                    <i class="fa-solid fa-mosque"></i>
+                </div>
+                <h2>Selamat Datang</h2>
+                <p>Silakan masuk ke akun Mt. Hudurissyifa</p>
+            </div>
+
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="username">Username / Email</label>
+                    <div class="input-with-icon">
+                        <i class="fa-regular fa-user"></i>
+                        <input type="text" id="username" placeholder="Masukkan username" required autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="password" placeholder="Masukkan password" required>
+                    </div>
+                </div>
+
+                <div class="forgot-password">
+                    <a href="#">Lupa Password?</a>
+                </div>
+
+                <button type="submit" id="btn-login" class="btn-primary w-100">
+                    Masuk <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <p>Belum punya akun? <a href="#">Hubungi Admin</a></p>
+            </div>
+        </div>
+
+        <!-- Background Elements -->
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <!-- Login Logic -->
+    <script>
+        // Gunakan URL API yang sama dengan di script.js
+        const LOGIN_API_URL = 'https://script.google.com/macros/s/AKfycbxxW06it8Zbw-621eiEafFs34A3NwGDG-x9PIwEoEgudwS21UskO37TL1okDtU_KCm_kA/exec';
+
+        document.getElementById('login-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('btn-login');
+
+            // Save original content for reset
+            const originalBtnHtml = btn.innerHTML;
+
+            // Loading state
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memvalidasi...';
+            btn.style.opacity = '0.8';
+            btn.disabled = true;
+
+            try {
+                // Fetch to Google Apps Script (GET request with parameters for simplicity in deployment).
+                // Ensure action=login is passed
+                const response = await fetch(`${LOGIN_API_URL}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    redirect: 'follow'
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    // Validasi sukses
+                    const sessionData = {
+                        isLoggedIn: true,
+                        id: result.data.id,
+                        username: result.data.username,
+                        name: result.data.name,
+                        role: result.data.role
+                    };
+
+                    // Simpan ke localStorage
+                    localStorage.setItem('majlis_session', JSON.stringify(sessionData));
+
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Berhasil';
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 500);
+                } else {
+                    // Validasi gagal
+                    alert(result.message || "Username atau password salah!");
+                    btn.innerHTML = originalBtnHtml;
+                    btn.style.opacity = '1';
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                console.error("Login Error:", error);
+                alert("Gagal menghubungi server. Periksa koneksi internet Anda atau pastikan URL API sudah benar.");
+                btn.innerHTML = originalBtnHtml;
+                btn.style.opacity = '1';
+                btn.disabled = false;
+            }
+        });
+
+        // Initialize Theme
+        const savedTheme = localStorage.getItem('majlis_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Redirect if already logged in
+        if (localStorage.getItem('majlis_session')) {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+
+</html>
