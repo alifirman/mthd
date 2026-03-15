@@ -6,12 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Mt. Hudurissyifa</title>
 
-    <!-- Meta -->
-    <meta name="theme-color" content="#4A90E2"> <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Majlis App">
-
     <!-- Google Fonts: Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,6 +13,9 @@
 
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
@@ -121,14 +118,26 @@
                     }, 500);
                 } else {
                     // Validasi gagal
-                    alert(result.message || "Username atau password salah!");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Login Gagal',
+                        text: result.message || "Username atau password salah!",
+                        confirmButtonColor: 'var(--primary)',
+                        heightAuto: false
+                    });
                     btn.innerHTML = originalBtnHtml;
                     btn.style.opacity = '1';
                     btn.disabled = false;
                 }
             } catch (error) {
                 console.error("Login Error:", error);
-                alert("Gagal menghubungi server. Periksa koneksi internet Anda atau pastikan URL API sudah benar.");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Kesalahan Jaringan',
+                    text: 'Gagal menghubungi server. Periksa koneksi internet Anda atau pastikan URL API sudah benar.',
+                    confirmButtonColor: 'var(--primary)',
+                    heightAuto: false
+                });
                 btn.innerHTML = originalBtnHtml;
                 btn.style.opacity = '1';
                 btn.disabled = false;
@@ -143,22 +152,6 @@
         if (localStorage.getItem('majlis_session')) {
             window.location.href = 'index.html';
         }
-    </script>
-
-    <script>
-    function aktifkanKiosk() {
-        let elem = document.documentElement;
-        if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-        } else if (elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen(); // Safari
-        }
-    }
-
-    // Contoh: aktifkan saat user menyentuh layar pertama kali
-    document.addEventListener("click", function() {
-        aktifkanKiosk();
-    }, { once: true });
     </script>
 </body>
 
