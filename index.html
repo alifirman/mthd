@@ -5,12 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Majlis App - Info Kajian, Event & Khataman</title>
-
     <!-- Meta -->
-    <meta name="theme-color" content="#4A90E2"> <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#4A90E2">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Majlis App">
+
+    <link rel="manifest" href="manifest.json">
 
     <!-- Google Fonts: Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,6 +21,9 @@
 
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
@@ -31,6 +36,11 @@
         <div class="logo">
             <i class="fa-solid fa-mosque"></i>
             <span>MajlisApp</span>
+            <div class="sync-indicator">
+                <span class="ping"></span>
+                <span class="dot"></span>
+                <span class="status-text">Live</span>
+            </div>
         </div>
         <ul class="nav-links">
             <li class="nav-item active" data-target="home">
@@ -73,6 +83,10 @@
             <div class="logo">
                 <i class="fa-solid fa-mosque"></i>
                 <span>Mt. Hudurissyifa</span>
+                <div class="sync-indicator">
+                    <span class="ping"></span>
+                    <span class="dot"></span>
+                </div>
             </div>
             <div style="display: flex; align-items: center; gap: 15px; margin-left: auto;">
                 <button id="theme-toggle-mobile" onclick="toggleTheme()"
@@ -373,18 +387,7 @@
                     </div>
                     <div class="input-group" style="flex: 1;">
                         <label>Jam / Waktu</label>
-                        <select id="kajian-time-select" class="form-input" required onchange="handleKajianTimeChange()">
-                            <option value="">-- Pilih Waktu --</option>
-                            <option value="Ba'da Shubuh">Ba'da Shubuh</option>
-                            <option value="Ba'da Dzuhur">Ba'da Dzuhur</option>
-                            <option value="Ba'da Ashar">Ba'da Ashar</option>
-                            <option value="Ba'da Maghrib">Ba'da Maghrib</option>
-                            <option value="Ba'da Isya">Ba'da Isya</option>
-                            <option value="custom">Lainnya...</option>
-                        </select>
-                        <input type="text" id="kajian-time-custom" class="form-input" placeholder="Tulis waktu, mis: 09:00 WIB"
-                            style="display:none; margin-top:8px;">
-                        <input type="hidden" id="kajian-time">
+                        <input type="text" id="kajian-time" class="form-input" required placeholder="08:00 WIB">
                     </div>
                 </div>
 
@@ -392,14 +395,13 @@
                     <label>Tipe Kajian</label>
                     <select id="kajian-type" class="form-input" required>
                         <option value="rutin">Kajian Rutin</option>
-                        <option value="tabligh">Tabligh Akbar</option>
+                        <option value="lainnya">Lainnya</option>
                     </select>
                 </div>
 
                 <div class="input-group">
                     <label>Lokasi (Nama Tempat)</label>
-                    <input type="text" id="kajian-location" class="form-input"
-                        placeholder="Mis: Masjid Al-Ikhlas / Lantai 2">
+                    <input type="text" id="kajian-location" class="form-input" placeholder="Kediaman Ummu Fulan">
                 </div>
 
                 <div class="input-group">
@@ -544,19 +546,19 @@
     <script src="script.js"></script>
 
     <script>
-    function aktifkanKiosk() {
-        let elem = document.documentElement;
-        if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-        } else if (elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen(); // Safari
+        function aktifkanKiosk() {
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen(); // Safari
+            }
         }
-    }
 
-    // Contoh: aktifkan saat user menyentuh layar pertama kali
-    document.addEventListener("click", function() {
-        aktifkanKiosk();
-    }, { once: true });
+        // Contoh: aktifkan saat user menyentuh layar pertama kali
+        document.addEventListener("click", function () {
+            aktifkanKiosk();
+        }, { once: true });
     </script>
 </body>
 
