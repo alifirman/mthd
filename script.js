@@ -30,31 +30,41 @@ function updateThemeUI(theme) {
     if (iconMobile) iconMobile.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
 }
 
-// Initialize theme immediately
-initTheme();
+// --- Alert & Notification Helpers (SweetAlert2) ---
+const showMsg = (title, text, icon = 'info') => {
+    return Swal.fire({
+        title,
+        text,
+        icon,
+        confirmButtonColor: 'var(--primary)',
+        heightAuto: false
+    });
+};
 
-// --- Kajian Time Select Handler ---
-function handleKajianTimeChange() {
-    const select = document.getElementById('kajian-time-select');
-    const customInput = document.getElementById('kajian-time-custom');
-    const hiddenInput = document.getElementById('kajian-time');
-    
-    if (select.value === 'custom') {
-        customInput.style.display = 'block';
-        customInput.required = true;
-        select.required = false;
-        hiddenInput.value = '';
-        customInput.focus();
-        customInput.addEventListener('input', function() {
-            hiddenInput.value = this.value;
-        });
-    } else {
-        customInput.style.display = 'none';
-        customInput.required = false;
-        customInput.value = '';
-        hiddenInput.value = select.value;
-    }
-}
+const showConfirm = (title, text, confirmText = 'Ya, Lanjutkan') => {
+    return Swal.fire({
+        title,
+        text,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: 'var(--primary)',
+        cancelButtonColor: '#aaa',
+        confirmButtonText: confirmText,
+        cancelButtonText: 'Batal',
+        heightAuto: false
+    });
+};
+
+const toast = (title, icon = 'success') => {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
+    });
+    Toast.fire({ icon, title });
+};
 
 // --- Session & Role Check ---
 const session = JSON.parse(localStorage.getItem('majlis_session'));
@@ -73,9 +83,12 @@ if (!session || !session.isLoggedIn) {
     });
 }
 
-function logout() {
-    localStorage.removeItem('majlis_session');
-    window.location.href = 'login.html';
+async function logout() {
+    const result = await showConfirm("Konfirmasi Keluar", "Apakah Anda yakin ingin keluar dari aplikasi?", "Ya, Keluar");
+    if (result.isConfirmed) {
+        localStorage.removeItem('majlis_session');
+        window.location.href = 'login.html';
+    }
 }
 
 // --- Navigation Logic ---
@@ -513,7 +526,8 @@ function renderKhatamanGrid(data) {
 }
 
 async function archiveKhataman() {
-    if (!confirm("Apakah Anda yakin ingin menyelesaikan putaran Khataman ini dan menyimpannya ke riwayat? Data grid akan dikosongkan.")) return;
+    const confirmRes = await showConfirm("Selesaikan Khataman", "Apakah Anda yakin ingin menyelesaikan putaran Khataman ini dan menyimpannya ke riwayat? Data grid akan dikosongkan.", "Ya, Selesaikan");
+    if (!confirmRes.isConfirmed) return;
     
     const archiveBtn = document.querySelector('#khataman-archive-container button');
     if (archiveBtn) {
@@ -534,14 +548,14 @@ async function archiveKhataman() {
         }
 
         if (result.success) {
-            alert("Alhamdulillah! Khataman telah berhasil diarsipkan.");
+            showMsg("Alhamdulillah!", "Khataman telah berhasil diarsipkan.", "success");
             initApp();
         } else {
-            alert("Gagal mengarsipkan: " + (result.message || "Pesan tidak diketahui. Pastikan Anda sudah Update/Deploy Script."));
+            showMsg("Gagal Mengarsipkan", (result.message || "Pesan tidak diketahui. Pastikan Anda sudah Update/Deploy Script."), "error");
         }
     } catch (err) {
         console.error(err);
-        alert("Terjadi kesalahan: " + err.message);
+        showMsg("Kesalahan", err.message, "error");
     } finally {
         if (archiveBtn) {
             archiveBtn.disabled = false;
@@ -582,13 +596,14 @@ document.getElementById('khataman-title-form').addEventListener('submit', async 
         const result = await response.json();
         if (result.success) {
             closeKhatamanTitleModal();
+            toast("Judul khataman diperbarui");
             initApp();
         } else {
-            alert("Gagal memperbarui judul: " + result.message);
+            showMsg("Gagal", result.message, "error");
         }
     } catch (err) {
         console.error(err);
-        alert("Terjadi kesalahan jaringan.");
+        showMsg("Kesalahan", "Gagal memperbarui judul.", "error");
     } finally {
         btn.innerHTML = 'Simpan';
         btn.disabled = false;
@@ -636,7 +651,8 @@ function closeKhatamanHistoryModal() {
 }
 
 async function toggleKhatamanPhase() {
-    if (!confirm("Ubah fase sesi Khataman ini? (Pengambilan <-> Membaca)")) return;
+    const result = await showConfirm("Ubah Fase Khataman", "Ubah fase sesi Khataman ini? (Pengambilan <-> Membaca)", "Ubah Fase");
+    if (!result.isConfirmed) return;
     
     const btn = document.getElementById('btn-toggle-phase');
     const originalHtml = btn.innerHTML;
@@ -645,15 +661,15 @@ async function toggleKhatamanPhase() {
 
     try {
         const response = await fetch(`${GOOGLE_SHEET_API_URL}?action=toggleKhatamanPhase&t=${new Date().getTime()}`);
-        const result = await response.json();
-        if (result.success) {
+        const resultData = await response.json();
+        if (resultData.success) {
             initApp();
         } else {
-            alert("Gagal mengubah fase: " + result.message);
+            showMsg("Gagal", resultData.message, "error");
         }
     } catch (err) {
         console.error(err);
-        alert("Terjadi kesalahan jaringan.");
+        showMsg("Kesalahan", "Terjadi kesalahan jaringan.", "error");
     } finally {
         btn.innerHTML = originalHtml;
         btn.disabled = false;
@@ -661,7 +677,8 @@ async function toggleKhatamanPhase() {
 }
 
 async function finishJuzReading(juzNum) {
-    if (!confirm(`Konfirmasi: Apakah Juz ${juzNum} sudah selesai Anda baca?`)) return;
+    const confirmRes = await showConfirm("Konfirmasi Selesai", `Apakah Juz ${juzNum} sudah selesai Anda baca?`, "Ya, Sudah");
+    if (!confirmRes.isConfirmed) return;
     
     try {
         const formData = new URLSearchParams();
@@ -676,10 +693,10 @@ async function finishJuzReading(juzNum) {
         });
         const result = await response.json();
         if (result.success) {
-            alert("Barakallah! Juz telah ditandai sebagai selesai.");
+            showMsg("Barakallah!", `Juz ${juzNum} telah ditandai sebagai selesai.`, "success");
             initApp();
         } else {
-            alert("Gagal: " + result.message);
+            showMsg("Gagal", result.message, "error");
             initApp();
         }
     } catch (err) {
@@ -689,13 +706,13 @@ async function finishJuzReading(juzNum) {
             const fbRes = await fetch(`${GOOGLE_SHEET_API_URL}?action=finishJuz&juz=${juzNum}&userId=${session.id || ''}`);
             const fbJson = await fbRes.json();
             if (fbJson.success) {
-                alert("Barakallah! Juz telah ditandai sebagai selesai.");
+                showMsg("Barakallah!", `Juz ${juzNum} telah ditandai sebagai selesai.`, "success");
                 initApp();
             } else {
-                alert("Gagal: " + fbJson.message);
+                showMsg("Gagal", fbJson.message, "error");
             }
         } catch (e2) {
-            alert("Terjadi kesalahan jaringan.");
+            showMsg("Kesalahan", "Terjadi kesalahan jaringan.", "error");
         }
     }
 }
@@ -703,11 +720,12 @@ async function finishJuzReading(juzNum) {
 // --- Khataman Logic ---
 async function takeJuz(juzNum) {
     if (!session || !session.isLoggedIn) {
-        alert("Silakan login terlebih dahulu untuk mengambil Juz.");
+        showMsg("Login Diperlukan", "Silakan login terlebih dahulu untuk mengambil Juz.", "warning");
         return;
     }
 
-    if (confirm(`Apakah Anda yakin ingin mengambil Juz ${juzNum} untuk dibaca?`)) {
+    const confirmRes = await showConfirm("Ambil Juz", `Apakah Anda yakin ingin mengambil Juz ${juzNum} untuk dibaca?`, "Ya, Ambil");
+    if (confirmRes.isConfirmed) {
         try {
             const items = document.querySelectorAll('.juz-item');
             const target = Array.from(items).find(el => el.querySelector('.juz-num').textContent == juzNum);
@@ -732,10 +750,10 @@ async function takeJuz(juzNum) {
             const result = await response.json();
 
             if (result.success) {
-                alert(`Alhamdulillah, Anda telah mengambil Juz ${juzNum}. Selamat tilawah!`);
+                showMsg("Alhamdulillah", `Anda telah mengambil Juz ${juzNum}. Selamat tilawah!`, "success");
                 initApp();
             } else {
-                alert("Gagal mengambil Juz: " + result.message);
+                showMsg("Gagal Mengambil", result.message, "error");
                 initApp();
             }
         } catch (err) {
@@ -744,14 +762,14 @@ async function takeJuz(juzNum) {
                 const fbRes = await fetch(`${GOOGLE_SHEET_API_URL}?action=takeJuz&juz=${juzNum}&name=${encodeURIComponent(session.name || 'Hamba Allah')}&userId=${session.id || ''}`);
                 const fbJson = await fbRes.json();
                 if (fbJson.success) {
-                    alert(`Alhamdulillah, Anda telah mengambil Juz ${juzNum}.`);
+                    showMsg("Alhamdulillah", `Anda telah mengambil Juz ${juzNum}.`, "success");
                     initApp();
                 } else {
-                    alert("Gagal: " + fbJson.message);
+                    showMsg("Gagal", fbJson.message, "error");
                     initApp();
                 }
             } catch (e2) {
-                alert("Terjadi kesalahan jaringan.");
+                showMsg("Kesalahan", "Terjadi kesalahan jaringan.", "error");
                 initApp();
             }
         }
@@ -807,6 +825,8 @@ function renderJamaahList(data) {
 
 
 // Kajian List State
+// Global data caches for optimization
+let lastDataCache = null;
 let globalKajianData = [];
 let globalEventData = [];
 
@@ -816,7 +836,7 @@ async function initApp() {
 
     if (!GOOGLE_SHEET_API_URL) {
         console.warn("API URL Google Sheets masih KOSONG. Buka script.js dan masukkan URL.");
-        alert("Silakan masukkan URL Web App Google Sheets Anda di variabel GOOGLE_SHEET_API_URL pada file script.js!");
+        showMsg("Setup Diperlukan", "Silakan masukkan URL Web App Google Sheets Anda di variabel GOOGLE_SHEET_API_URL pada file script.js!", "warning");
     } else {
         try {
             // Indikator loading bisa ditambahkan di sini (Skeletons sudah tampil via HTML)
@@ -831,10 +851,19 @@ async function initApp() {
 
             // Re-assign data dari Google Spreadsheet
             appData = dataResult;
-            console.log("Data berhasil dimuat dari Google Sheets!", appData);
+            
+            // Periksa apakah data berubah dibanding cache terakhir
+            const currentDataString = JSON.stringify(appData);
+            if (lastDataCache === currentDataString) {
+                console.log("Data tidak berubah, melewati re-render.");
+                return; // Berhenti jika tidak ada perubahan
+            }
+            lastDataCache = currentDataString;
+            
+            console.log("Data berubah! Memulai update UI...", appData);
         } catch (error) {
             console.error("Gagal mengambil data dari Google Sheets API:", error);
-            alert("Ada kesalahan saat memuat data. Periksa jaringan internet atau URL API Anda.");
+            showMsg("Kesalahan Memuat Data", "Ada kesalahan saat memuat data. Periksa jaringan internet atau URL API Anda.", "error");
         }
     }
 
@@ -867,10 +896,6 @@ dateEl.textContent = new Date().toLocaleDateString('id-ID', { weekday: 'long', y
 function openKajianModal() {
     document.getElementById('kajian-id').value = '';
     document.getElementById('kajian-form').reset();
-    document.getElementById('kajian-time-custom').style.display = 'none';
-    document.getElementById('kajian-time-custom').value = '';
-    document.getElementById('kajian-time-custom').required = false;
-    document.getElementById('kajian-time-select').required = true;
     document.getElementById('kajian-modal-title').textContent = 'Tambah Jadwal Kajian';
     document.getElementById('kajian-modal').classList.add('active');
 }
@@ -908,43 +933,26 @@ function editKajian(id) {
         document.getElementById('kajian-location').value = item.location || '';
         document.getElementById('kajian-map-url').value = item.mapurl || '';
 
-        // Set time select properly
-        const timeSelect = document.getElementById('kajian-time-select');
-        const timeCustom = document.getElementById('kajian-time-custom');
-        const timeHidden = document.getElementById('kajian-time');
-        const timeValue = item.time || '';
-        
-        // Check if the time value matches one of the preset options
-        const presetOptions = ["Ba'da Shubuh", "Ba'da Dzuhur", "Ba'da Ashar", "Ba'da Maghrib", "Ba'da Isya"];
-        if (presetOptions.includes(timeValue)) {
-            timeSelect.value = timeValue;
-            timeCustom.style.display = 'none';
-            timeCustom.value = '';
-        } else {
-            timeSelect.value = 'custom';
-            timeCustom.style.display = 'block';
-            timeCustom.value = timeValue;
-        }
-        timeHidden.value = timeValue;
-
         document.getElementById('kajian-modal-title').textContent = 'Edit Jadwal Kajian';
         document.getElementById('kajian-modal').classList.add('active');
     }
 }
 
 async function deleteKajian(id) {
-    if (confirm("Yakin ingin menghapus jadwal kajian ini?")) {
+    const result = await showConfirm("Hapus Jadwal", "Yakin ingin menghapus jadwal kajian ini?", "Ya, Hapus");
+    if (result.isConfirmed) {
         try {
             const response = await fetch(`${GOOGLE_SHEET_API_URL}?action=deleteKajian&id=${id}`);
-            const result = await response.json();
-            if (result.success) {
+            const resultData = await response.json();
+            if (resultData.success) {
+                toast("Jadwal kajian berhasil dihapus");
                 initApp(); // Refresh
             } else {
-                alert("Gagal menghapus: " + result.message);
+                showMsg("Gagal Menghapus", resultData.message, "error");
             }
         } catch (err) {
             console.error(err);
-            alert("Terjadi kesalahan jaringan.");
+            showMsg("Kesalahan Jaringan", "Terjadi kesalahan saat menghubungi server.", "error");
         }
     }
 }
@@ -991,13 +999,17 @@ function editEvent(id) {
 }
 
 async function deleteEvent(id) {
-    if (confirm("Yakin ingin menghapus Event Spesial ini?")) {
+    const result = await showConfirm("Hapus Event", "Yakin ingin menghapus Event Spesial ini?", "Ya, Hapus");
+    if (result.isConfirmed) {
         try {
             const fbRes = await fetch(`${GOOGLE_SHEET_API_URL}?action=deleteEvent&id=${id}`);
             const fbJson = await fbRes.json();
-            if (fbJson.success) { initApp(); }
-            else { alert("Gagal: " + fbJson.message); }
-        } catch (e) { alert("Kesalahan jaringan."); }
+            if (fbJson.success) { 
+                toast("Event berhasil dihapus");
+                initApp(); 
+            }
+            else { showMsg("Gagal", fbJson.message, "error"); }
+        } catch (e) { showMsg("Kesalahan", "Gagal menghubungi server.", "error"); }
     }
 }
 
@@ -1045,7 +1057,8 @@ function editJamaah(id) {
 }
 
 async function deleteJamaah(id) {
-    if (confirm("Yakin ingin menghapus data anggota ini? Datanya akan hilang dari database.")) {
+    const result = await showConfirm("Hapus Jamaah", "Yakin ingin menghapus data anggota ini? Datanya akan hilang dari database.", "Ya, Hapus");
+    if (result.isConfirmed) {
         // Optimistic UI Delete
         const originalData = [...globalJamaahData];
         globalJamaahData = globalJamaahData.filter(j => j.id != id);
@@ -1054,16 +1067,18 @@ async function deleteJamaah(id) {
         try {
             // Fetch API to Delete
             const response = await fetch(`${GOOGLE_SHEET_API_URL}?action=deleteJamaah&id=${id}`, { method: 'GET' });
-            const result = await response.json();
+            const resultData = await response.json();
 
-            if (!result.success) {
-                alert("Gagal menghapus ke server: " + result.message);
+            if (!resultData.success) {
+                showMsg("Gagal Menghapus", resultData.message, "error");
                 globalJamaahData = originalData; // revert
                 renderJamaahList(globalJamaahData);
+            } else {
+                toast("Data anggota berhasil dihapus");
             }
         } catch (err) {
             console.error(err);
-            alert("Terjadi kesalahan jaringan.");
+            showMsg("Kesalahan Jaringan", "Gagal menghubungi server.", "error");
             globalJamaahData = originalData; // revert
             renderJamaahList(globalJamaahData);
         }
@@ -1113,10 +1128,11 @@ document.getElementById('jamaah-form').addEventListener('submit', async function
 
         if (result.success) {
             closeJamaahModal();
+            toast("Data jamaah berhasil disimpan");
             // Refresh data from server to reflect changes reliably
             initApp();
         } else {
-            alert("Gagal menyimpan data: " + result.message);
+            showMsg("Gagal Menyimpan", result.message, "error");
         }
     } catch (err) {
         console.error("Gagal Posting:", err);
@@ -1128,12 +1144,13 @@ document.getElementById('jamaah-form').addEventListener('submit', async function
             const fallbackJson = await fallbackRes.json();
             if (fallbackJson.success) {
                 closeJamaahModal();
+                toast("Data jamaah berhasil disimpan (via fallback)");
                 initApp();
             } else {
-                alert("Gagal menyimpan data via Fallback GET.");
+                showMsg("Gagal Menyimpan", "(Fallback) " + fallbackJson.message, "error");
             }
         } catch (e2) {
-            alert("Gagal menghubungi server penyimpan data.");
+            showMsg("Kesalahan", "Gagal menghubungi server penyimpan data.", "error");
         }
     } finally {
         btn.innerHTML = 'Simpan';
@@ -1151,10 +1168,7 @@ document.getElementById('kajian-form').addEventListener('submit', async function
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
     btn.disabled = true;
 
-    // Get time value from select or custom input
-    const timeSelect = document.getElementById('kajian-time-select');
-    const timeCustom = document.getElementById('kajian-time-custom');
-    const timeValue = timeSelect.value === 'custom' ? timeCustom.value : timeSelect.value;
+    const timeValue = document.getElementById('kajian-time').value;
 
     const formData = new URLSearchParams();
     formData.append('action', id ? 'editKajian' : 'addKajian');
@@ -1176,9 +1190,10 @@ document.getElementById('kajian-form').addEventListener('submit', async function
         const result = await response.json();
         if (result.success) {
             closeKajianModal();
+            toast("Jadwal kajian berhasil disimpan");
             initApp();
         } else {
-            alert("Gagal menyimpan: " + result.message);
+            showMsg("Gagal Menyimpan", result.message, "error");
         }
     } catch (err) {
         console.error(err);
@@ -1186,8 +1201,12 @@ document.getElementById('kajian-form').addEventListener('submit', async function
         try {
             const fbRes = await fetch(`${GOOGLE_SHEET_API_URL}?${formData.toString()}`);
             const fbJson = await fbRes.json();
-            if (fbJson.success) { closeKajianModal(); initApp(); }
-        } catch (e2) { alert("Gagal menghubungi server."); }
+            if (fbJson.success) { 
+                closeKajianModal(); 
+                toast("Jadwal kajian berhasil disimpan (fallback)");
+                initApp(); 
+            }
+        } catch (e2) { showMsg("Kesalahan", "Gagal menghubungi server.", "error"); }
     } finally {
         btn.innerHTML = 'Simpan';
         btn.disabled = false;
@@ -1223,17 +1242,22 @@ document.getElementById('event-form').addEventListener('submit', async function 
         const result = await response.json();
         if (result.success) {
             closeEventModal();
+            toast("Data event berhasil disimpan");
             initApp();
         } else {
-            alert("Gagal menyimpan: " + result.message);
+            showMsg("Gagal Menyimpan", result.message, "error");
         }
     } catch (err) {
         console.error(err);
         try {
             const fbRes = await fetch(`${GOOGLE_SHEET_API_URL}?${formData.toString()}`);
             const fbJson = await fbRes.json();
-            if (fbJson.success) { closeEventModal(); initApp(); }
-        } catch (e2) { alert("Gagal menghubungi server."); }
+            if (fbJson.success) { 
+                closeEventModal(); 
+                toast("Data event berhasil disimpan (fallback)");
+                initApp(); 
+            }
+        } catch (e2) { showMsg("Kesalahan", "Gagal menghubungi server.", "error"); }
     } finally {
         btn.innerHTML = 'Simpan';
         btn.disabled = false;
@@ -1257,3 +1281,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Auto-Refresh Polling (Realtime Updates)
+// Refresh data setiap 15 detik untuk mendeteksi perubahan di Google Sheets
+setInterval(() => {
+    // Hanya refresh jika user sedang tidak membuka modal (untuk menghindari input terhapus saat mengetik)
+    const isModalOpen = !!document.querySelector('.modal-overlay.active');
+    if (!isModalOpen) {
+        initApp();
+    }
+}, 15000); // 15000 ms = 15 detik
