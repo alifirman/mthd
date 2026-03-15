@@ -1337,3 +1337,53 @@ body.role-superadmin section.admin-only.active-section,
 body.role-superadmin section.superadmin-only.active-section {
     display: block !important;
 }
+
+/* Live Sync Indicator */
+.sync-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: rgba(var(--primary-rgb), 0.1);
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-top: 10px;
+}
+
+.sync-indicator .dot {
+    width: 6px;
+    height: 6px;
+    background: var(--primary);
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 0 10px var(--primary);
+}
+
+.sync-indicator .ping {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--primary);
+    border-radius: 50%;
+    animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+    opacity: 0.75;
+}
+
+@keyframes ping {
+    75%, 100% {
+        transform: scale(3.5);
+        opacity: 0;
+    }
+}
+
+.mobile-header .sync-indicator {
+    margin-top: 0;
+    padding: 4px 10px;
+    background: transparent;
+}
+
+.mobile-header .sync-indicator .status-text {
+    display: none; /* Hide text on mobile header to save space */
+}
