@@ -362,6 +362,28 @@ function applyKajianFilter(filterType) {
 }
 
 
+function getDirectImageUrl(url, isThumbnail = false) {
+    if (!url) return 'https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=800&q=80';
+    
+    const getGdriveId = (urlStr) => {
+        const fileMatch = urlStr.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+        if (fileMatch && fileMatch[1]) return fileMatch[1];
+        const openMatch = urlStr.match(/id=([a-zA-Z0-9_-]+)/);
+        if (urlStr.includes('drive.google.com') && openMatch && openMatch[1]) return openMatch[1];
+        return null;
+    };
+
+    const gDriveId = getGdriveId(url);
+    if (gDriveId) {
+        if (isThumbnail) {
+            return `https://drive.google.com/thumbnail?id=${gDriveId}&sz=w800`;
+        }
+        return `https://drive.google.com/uc?export=view&id=${gDriveId}`;
+    }
+    
+    return url;
+}
+
 function renderEventList(data) {
     globalEventData = data;
     const list = document.getElementById('event-list');
@@ -387,13 +409,15 @@ function renderEventList(data) {
 
         const eventLocationHtml = item.location ? `<p style="color: var(--text-muted); font-size: 0.9rem; display:flex; align-items:center; gap:6px; margin-top:8px;"><i class="fa-solid fa-location-dot" style="color:var(--primary);"></i> ${item.location}</p>` : '';
         const eventMapBtnHtml = item.mapurl ? `<a href="${item.mapurl}" target="_blank" class="btn-action btn-map-nav" style="text-decoration:none; margin-top:10px;"><i class="fa-solid fa-map-location-dot"></i> Navigasi</a>` : '';
+        const bgUrl = getDirectImageUrl(item.image, true);
+        const openUrl = getDirectImageUrl(item.image, false);
 
         const cardHtml = `
-            <div class="event-card" style="margin-bottom: 20px;">
+            <div class="event-card" style="margin-bottom: 20px; border-radius: 16px; overflow: hidden; background: var(--bg-card); box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative;">
                 <div class="event-img" 
-                     onclick="window.open('${item.image || 'https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=800&q=80'}', '_blank')"
-                     style="background-image: url('${item.image || 'https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=800&q=80'}'); height: 180px; background-size: cover; background-position: center; cursor: zoom-in;">
-                    <span class="event-date-badge" style="position: absolute; top: 15px; right: 15px; background: var(--primary); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">
+                     onclick="window.open('${openUrl}', '_blank')"
+                     style="background-image: url('${bgUrl}'); height: 180px; background-size: cover; background-position: center; cursor: zoom-in; position: relative;">
+                    <span class="event-date-badge" style="position: absolute; top: 15px; right: 15px; background: var(--primary); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
                         ${item.date ? formatDateToIndonesian(item.date) : ''}
                     </span>
                 </div>
