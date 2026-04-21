@@ -61,8 +61,8 @@
             </li>
             <li class="nav-item admin-only" data-target="datamaster"
                 style="margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 20px;">
-                <i class="fa-solid fa-users-gear" style="color:var(--primary);"></i>
-                <span style="color:var(--primary); font-weight: 600;">Data Master</span>
+                <i class="fa-solid fa-users-gear"></i>
+                <span>Data Master</span>
             </li>
             <!-- Theme Toggle Desktop -->
             <li class="nav-item" onclick="toggleTheme()" style="margin-top: 10px;">
@@ -70,8 +70,8 @@
                 <span id="theme-text-desktop">Mode Gelap</span>
             </li>
         </ul>
-        <button id="desktop-logout-btn" class="btn-action btn-logout" onclick="logout()"
-            style="margin-top:auto; width: 100%; justify-content:center; padding: 12px;">
+        <button id="desktop-logout-btn" class="btn-action btn-logout badge-warning" onclick="logout()"
+            style="margin-top:auto; width: 100%; justify-content:center; padding: 12px; border:none;">
             <i class="fa-solid fa-right-from-bracket"></i> Keluar
         </button>
     </nav>
@@ -106,18 +106,34 @@
             <section id="home" class="view-section active-section">
                 <div class="hero-card">
                     <div class="hero-content">
+                        <p class="date-today" id="current-date">Senin, 10 Muharram 1446 H</p>
                         <h2 id="welcome-text">Ahlan Wasahlan, <br><span id="user-display-name">Banaat
                                 Hudurissyifa</span></h2>
                         <p>Temukan kedamaian melalui ilmu dan silaturahmi di Majlis ini.</p>
-                        <p class="date-today" id="current-date">Senin, 10 Muharram 1446 H</p>
                     </div>
                     <div class="hero-overlay"></div>
+                </div>
+
+                <!-- JADWAL SHOLAT SECTION -->
+                <div class="prayer-times-section">
+                    <div class="section-heading">
+                        <h3>Jadwal Sholat</h3>
+                        <span id="prayer-location" style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;"><i class="fa-solid fa-location-crosshairs"></i> Mendeteksi Lokasi...</span>
+                    </div>
+                    <div class="prayer-scroll" id="prayer-times-list">
+                        <!-- Skeleton Cards -->
+                        <div class="prayer-card"><span class="prayer-name">...</span><span class="prayer-time">--:--</span></div>
+                        <div class="prayer-card"><span class="prayer-name">...</span><span class="prayer-time">--:--</span></div>
+                        <div class="prayer-card"><span class="prayer-name">...</span><span class="prayer-time">--:--</span></div>
+                        <div class="prayer-card"><span class="prayer-name">...</span><span class="prayer-time">--:--</span></div>
+                        <div class="prayer-card"><span class="prayer-name">...</span><span class="prayer-time">--:--</span></div>
+                    </div>
                 </div>
 
                 <div class="quick-stats">
                     <div class="stat-card" data-target="kajian" onclick="navigateTo('kajian')">
                         <div class="icon-wrapper green-light">
-                            <i class="fa-solid fa-book-open"></i>
+                            <i class="fa-solid fa-book-open-reader"></i>
                         </div>
                         <div class="stat-info">
                             <h3>Kajian</h3>
@@ -126,7 +142,7 @@
                     </div>
                     <div class="stat-card" data-target="event" onclick="navigateTo('event')">
                         <div class="icon-wrapper orange-light">
-                            <i class="fa-solid fa-calendar-days"></i>
+                            <i class="fa-solid fa-calendar-star"></i>
                         </div>
                         <div class="stat-info">
                             <h3>Event</h3>
@@ -135,7 +151,7 @@
                     </div>
                     <div class="stat-card" data-target="khataman" onclick="navigateTo('khataman')">
                         <div class="icon-wrapper blue-light">
-                            <i class="fa-solid fa-quran"></i>
+                            <i class="fa-solid fa-book-quran"></i>
                         </div>
                         <div class="stat-info">
                             <h3>Khataman</h3>
@@ -150,12 +166,10 @@
                         <h3>Akses Cepat (Admin)</h3>
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-                        <button class="btn-action" onclick="openKajianModal()"
-                            style="padding: 12px; justify-content: center; background: var(--accent); color: var(--primary);">
+                        <button class="btn-action badge-gold" onclick="openKajianModal()" style="padding: 12px; justify-content: center;">
                             <i class="fa-solid fa-calendar-plus"></i> Tambah Kajian
                         </button>
-                        <button class="btn-action superadmin-only" onclick="openEventModal()"
-                            style="padding: 12px; justify-content: center; background: #FFF4E5; color: #E67E22;">
+                        <button class="btn-action badge-warning superadmin-only" onclick="openEventModal()" style="padding: 12px; justify-content: center;">
                             <i class="fa-solid fa-calendar-check"></i> Tambah Event
                         </button>
                     </div>
@@ -227,7 +241,7 @@
                 </div>
 
                 <div class="progress-container glass-card">
-                    <div class="progress-header">
+                    <div class="progress-header" style="display: flex; justify-content: space-between; align-items: start;">
                         <div style="display: flex; flex-direction: column; gap: 4px;">
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <h3 id="khataman-current-title">Khataman Putaran #12</h3>
@@ -237,18 +251,14 @@
                                 </button>
                             </div>
                             <div id="khataman-phase-badge-container">
-                                <span class="badge" id="khataman-phase-badge"
-                                    style="background: var(--primary-light); color: var(--primary);">Memuat
-                                    Sesi...</span>
+                                <span class="badge" id="khataman-phase-badge">Memuat Sesi...</span>
                             </div>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <button class="btn-action admin-only" id="btn-toggle-phase" onclick="toggleKhatamanPhase()"
-                                style="background: var(--primary); color: white; padding: 6px 12px; font-size: 0.75rem;">
+                        <div class="khataman-actions" style="display: flex; align-items: center; gap: 10px;">
+                            <button class="btn-action admin-only" id="btn-toggle-phase" onclick="toggleKhatamanPhase()">
                                 <i class="fa-solid fa-toggle-on"></i> Tutup Sesi
                             </button>
-                            <button class="btn-action" onclick="openKhatamanHistoryModal()"
-                                style="background: #E8F0FE; color: #1A73E8; padding: 6px 12px; font-size: 0.75rem;">
+                            <button class="btn-action badge-info" onclick="openKhatamanHistoryModal()">
                                 <i class="fa-solid fa-clock-rotate-left"></i> Riwayat
                             </button>
                         </div>
@@ -348,8 +358,7 @@
 
                 <div class="input-group"
                     style="display:flex; justify-content:end; gap: 10px; margin-top:20px; margin-bottom: 0;">
-                    <button type="button" class="btn-action" style="background:#FFF4E5; color:#E67E22;"
-                        onclick="closeJamaahModal()">Batal</button>
+                    <button type="button" class="btn-action badge-warning" onclick="closeJamaahModal()">Batal</button>
                     <button type="submit" class="btn-primary" id="btn-save-jamaah"
                         style="padding: 10px 20px;">Simpan</button>
                 </div>
@@ -411,8 +420,7 @@
 
                 <div class="input-group"
                     style="display:flex; justify-content:end; gap: 10px; margin-top:20px; margin-bottom: 0;">
-                    <button type="button" class="btn-action" style="background:#FFF4E5; color:#E67E22;"
-                        onclick="closeKajianModal()">Batal</button>
+                    <button type="button" class="btn-action badge-warning" onclick="closeKajianModal()">Batal</button>
                     <button type="submit" class="btn-primary" id="btn-save-kajian"
                         style="padding: 10px 20px;">Simpan</button>
                 </div>
@@ -469,8 +477,7 @@
 
                 <div class="input-group"
                     style="display:flex; justify-content:end; gap: 10px; margin-top:20px; margin-bottom: 0;">
-                    <button type="button" class="btn-action" style="background:#FFF4E5; color:#E67E22;"
-                        onclick="closeEventModal()">Batal</button>
+                    <button type="button" class="btn-action badge-warning" onclick="closeEventModal()">Batal</button>
                     <button type="submit" class="btn-primary" id="btn-save-event"
                         style="padding: 10px 20px;">Simpan</button>
                 </div>
@@ -517,8 +524,7 @@
                 </div>
                 <div class="input-group"
                     style="display:flex; justify-content:end; gap: 10px; margin-top:20px; margin-bottom: 0;">
-                    <button type="button" class="btn-action" style="background:#FFF4E5; color:#E67E22;"
-                        onclick="closeKhatamanTitleModal()">Batal</button>
+                    <button type="button" class="btn-action badge-warning" onclick="closeKhatamanTitleModal()">Batal</button>
                     <button type="submit" class="btn-primary" id="btn-save-khataman-title"
                         style="padding: 10px 20px;">Simpan</button>
                 </div>
