@@ -1,92 +1,117 @@
 :root {
-    /* --- Brand Colors (Static) --- */
-    --primary: #025C3C;
-    --primary-rgb: 2, 92, 60;
-    --primary-light: #038A5A;
-    --secondary: #D4AF37;
+    /* --- Premium Minimalist Brand Colors --- */
+    --primary: #0B3D2E;
+    --primary-rgb: 11, 61, 46;
+    --primary-light: #165C46;
+    --secondary: #C5A059; /* Champagne Gold */
+    --accent: #D1B06F;
     
-    /* --- Light Theme (Default) --- */
-    --bg-main: #F4F7F6;
-    --bg-card: rgba(255, 255, 255, 0.85);
+    /* --- Light Theme (Premium Minimalist) --- */
+    --bg-main: #FDFBFA; /* Creamy White */
+    --bg-card: rgba(255, 255, 255, 0.9);
     --bg-sidebar: #ffffff;
     --bg-input: #ffffff;
     
     --text-main: #1A1F1B;
-    --text-muted: #6C7A72;
+    --text-muted: #64748B;
     --text-on-primary: #ffffff;
     --text-on-primary-rgb: 255, 255, 255;
     
-    --border-color: rgba(2, 92, 60, 0.1);
-    --border-glass: rgba(255, 255, 255, 0.4);
+    --border-color: rgba(11, 61, 46, 0.08);
+    --border-glass: rgba(255, 255, 255, 0.5);
     
-    --shadow-lg: 0 10px 30px rgba(2, 92, 60, 0.12);
+    --shadow-sm: 0 4px 12px rgba(11, 61, 46, 0.04);
+    --shadow-md: 0 8px 24px rgba(11, 61, 46, 0.06);
+    --shadow-lg: 0 16px 48px rgba(11, 61, 46, 0.08);
     
-    /* --- Accents (Theme-dependent) --- */
-    --bg-accent-green: #E8F5EE;
-    --text-accent-green: #025C3C;
-    --bg-accent-orange: #FFF4E5;
-    --text-accent-orange: #E67E22;
-    --bg-accent-blue: #E8F0FE;
-    --text-accent-blue: #1A73E8;
-    --bg-accent-gray: #E2E8F0;
+    /* --- Accents --- */
+    --bg-accent-green: #F0F7F4;
+    --text-accent-green: #0B3D2E;
+    --bg-accent-orange: #FFF8F0;
+    --text-accent-orange: #B45309;
+    --bg-accent-blue: #F0F7FF;
+    --text-accent-blue: #0369A1;
+    --bg-accent-gray: #F1F5F9;
     
-    --bg-skeleton: #e2e5e4;
-    --bg-gradient-auth: linear-gradient(135deg, var(--bg-main) 0%, #E8F5EE 100%);
+    --bg-skeleton: #F1F5F9;
+    --bg-gradient-auth: radial-gradient(circle at top left, #FDFBFA 0%, #F0F7F4 100%);
     
     /* --- Role Badges --- */
-    --bg-role-user: #F1F3F4;
-    --text-role-user: #5F6368;
-    --bg-role-admin: #E8F0FE;
-    --text-role-admin: #1A73E8;
-    --bg-role-superadmin: #FFD700;
-    --text-role-superadmin: #8B4513;
+    --bg-role-user: #F1F5F9;
+    --text-role-user: #475569;
+    --bg-role-admin: #F0F7FF;
+    --text-role-admin: #0369A1;
+    --bg-role-superadmin: #FEF3C7;
+    --text-role-superadmin: #92400E;
     
-    --radius-md: 16px;
-    --radius-lg: 24px;
-    --transition: background 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-full: 9999px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* --- Dark Theme Overrides --- */
+/* --- Premium SweetAlert2 Customizations --- */
+.premium-swal-popup {
+    border-radius: var(--radius-lg) !important;
+    padding: 30px !important;
+    background: var(--bg-card) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid var(--border-glass) !important;
+    box-shadow: var(--shadow-lg) !important;
+}
+
+.premium-swal-button {
+    border-radius: 12px !important;
+    padding: 12px 24px !important;
+    font-family: inherit !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.15) !important;
+}
+
+.premium-swal-cancel {
+    border-radius: 12px !important;
+    padding: 12px 24px !important;
+    font-family: inherit !important;
+    font-weight: 600 !important;
+}
+
+/* --- Dark Theme Overrides (Sophisticated Dark) --- */
 [data-theme="dark"] {
-    --bg-main: #0B100D;
-    --bg-card: rgba(26, 31, 27, 0.8);
-    --bg-sidebar: #131A16;
-    --bg-input: #1a1f1b;
+    --bg-main: #060907;
+    --bg-card: rgba(18, 24, 20, 0.85);
+    --bg-sidebar: #0B100D;
+    --bg-input: #131A16;
     
-    --text-main: #F4F7F6;
-    --text-muted: #A0B0A7;
-    --text-on-primary: #ffffff;
-    --text-on-primary-rgb: 255, 255, 255;
+    --text-main: #ECEFEE;
+    --text-muted: #8E9B94;
     
-    --border-color: rgba(255, 255, 255, 0.1);
-    --border-glass: rgba(255, 255, 255, 0.05);
+    --border-color: rgba(255, 255, 255, 0.06);
+    --border-glass: rgba(255, 255, 255, 0.03);
     
-    --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.4);
-    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+    --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.6);
     
-    /* Accents in Dark Mode */
-    --bg-accent-green: rgba(4, 148, 96, 0.15);
-    --text-accent-green: #04BD7A;
-    --bg-accent-orange: rgba(230, 126, 34, 0.15);
-    --text-accent-orange: #FF9F43;
-    --bg-accent-blue: rgba(26, 115, 232, 0.15);
-    --text-accent-blue: #8AB4F8;
-    --bg-accent-gray: rgba(148, 163, 184, 0.15);
+    --bg-accent-green: rgba(20, 184, 116, 0.1);
+    --text-accent-green: #2DDD91;
+    --bg-accent-orange: rgba(245, 158, 11, 0.1);
+    --text-accent-orange: #FBBF24;
+    --bg-accent-blue: rgba(56, 189, 248, 0.1);
+    --text-accent-blue: #7DD3FC;
     
-    --bg-skeleton: #1a1f1b;
-    --bg-gradient-auth: linear-gradient(135deg, #0B100D 0%, #131A16 100%);
+    --bg-skeleton: #131A16;
+    --bg-gradient-auth: linear-gradient(135deg, #060907 0%, #0B100D 100%);
     
-    /* Role Badges in Dark Mode */
-    --bg-role-user: rgba(148, 163, 184, 0.15);
+    --bg-role-user: rgba(148, 163, 184, 0.1);
     --text-role-user: #94A3B8;
-    --bg-role-admin: rgba(26, 115, 232, 0.15);
-    --text-role-admin: #8AB4F8;
-    --bg-role-superadmin: rgba(212, 175, 55, 0.2);
-    --text-role-superadmin: #D4AF37;
+    --bg-role-admin: rgba(56, 189, 248, 0.1);
+    --text-role-admin: #7DD3FC;
+    --bg-role-superadmin: rgba(197, 160, 89, 0.15);
+    --text-role-superadmin: #C5A059;
     
-    /* Adjust primary for dark mode legibility */
-    --primary: #049460;
+    --primary: #10B981;
+    --primary-rgb: 16, 185, 129;
 }
 
 * {
@@ -112,6 +137,15 @@ body {
     border: 1px solid var(--border-glass);
 }
 
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+    border-radius: var(--radius-lg);
+}
+
 /* LAYOUT: MOBILE FIRST */
 .desktop-nav {
     display: none;
@@ -131,67 +165,63 @@ body {
 .logo {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 1.25rem;
+    gap: 12px;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--primary);
-}
-
-.user-profile img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 2px solid var(--secondary);
+    letter-spacing: -0.02em;
 }
 
 .content-area {
-    padding-bottom: 90px;
+    padding-bottom: 110px;
     /* Space for mobile nav */
 }
 
 #app-container {
-    padding: 0 24px;
+    padding: 0 20px;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 /* Views Logic */
 .view-section {
     display: none;
-    animation: fadeIn 0.4s ease-out forwards;
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .view-section.active-section {
     display: block;
 }
 
-@keyframes fadeIn {
+@keyframes slideUp {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(20px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-/* Mobile Bottom Navigation - Modern Floating Style */
+/* Mobile Bottom Navigation - Sleek Minimalist */
 .mobile-nav {
     position: fixed;
-    bottom: 20px;
-    left: 20px;
-    right: 20px;
-    background: var(--bg-card);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--border-glass);
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 48px);
+    max-width: 400px;
+    background: rgba(var(--primary-rgb), 0.9);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     display: flex;
     justify-content: space-around;
-    padding: 10px 8px;
-    z-index: 1000;
-    box-shadow: var(--shadow-lg);
-    border-radius: 24px;
-    margin-bottom: env(safe-area-inset-bottom, 0);
+    padding: 12px 16px;
+    z-index: 2000;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .mobile-nav .nav-item {
@@ -199,55 +229,41 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2px;
-    color: var(--text-muted);
-    font-size: 0.7rem;
+    gap: 0;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.65rem;
     font-weight: 500;
     cursor: pointer;
     transition: var(--transition);
     flex: 1;
-    position: relative;
-    padding: 4px 0;
 }
 
 .mobile-nav .nav-item i {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     transition: var(--transition);
+    height: 32px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
 }
 
 .mobile-nav .nav-item.active {
-    color: var(--primary);
-    font-weight: 600;
+    color: var(--secondary);
 }
 
 .mobile-nav .nav-item.active i {
-    background: var(--primary);
-    color: var(--text-on-primary);
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(var(--primary-rgb), 0.3);
+    transform: translateY(-2px);
 }
 
-.mobile-nav .nav-item::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    width: 4px;
-    height: 4px;
-    background: var(--primary);
-    border-radius: 50%;
+.mobile-nav .nav-item span {
     opacity: 0;
+    transform: translateY(4px);
     transition: var(--transition);
+    font-size: 0.6rem;
 }
 
-.mobile-nav .nav-item.active::after {
+.mobile-nav .nav-item.active span {
     opacity: 1;
-    transform: scale(1.5);
+    transform: translateY(0);
 }
 
 /* --- SECTION: HOME --- */
@@ -255,70 +271,88 @@ body {
     position: relative;
     border-radius: var(--radius-lg);
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-    padding: 30px 24px;
+    padding: 40px 30px;
     color: var(--text-on-primary);
-    margin-bottom: 24px;
+    margin: 20px 0 32px;
     overflow: hidden;
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(var(--primary-rgb), 0.1);
 }
 
 .hero-overlay {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: url('https://www.transparenttextures.com/patterns/arabesque.png');
-    opacity: 0.1;
+    top: -50%;
+    right: -20%;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    border-radius: 50%;
     pointer-events: none;
 }
 
 .hero-content h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 8px;
-    position: relative;
-    z-index: 2;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+}
+
+.hero-content h2 span {
+    color: var(--secondary);
 }
 
 .hero-content p {
-    font-size: 0.9rem;
-    opacity: 0.9;
-    line-height: 1.4;
-    margin-bottom: 16px;
-    position: relative;
-    z-index: 2;
+    font-size: 0.95rem;
+    opacity: 0.8;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    max-width: 90%;
 }
 
 .date-today {
-    display: inline-block;
-    background: rgba(var(--text-on-primary-rgb, 255, 255, 255), 0.2);
-    padding: 6px 12px;
-    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
     font-size: 0.8rem !important;
     font-weight: 500;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.date-today::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--secondary);
+    border-radius: 50%;
 }
 
 .quick-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 30px;
+    gap: 16px;
+    margin-bottom: 40px;
 }
 
 .stat-card {
-    background: var(--bg-sidebar);
-    padding: 16px 12px;
-    border-radius: var(--radius-md);
+    background: var(--bg-card);
+    padding: 20px 12px;
+    border-radius: var(--radius-lg);
     text-align: center;
     box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
     cursor: pointer;
     transition: var(--transition);
 }
 
-.stat-card:active {
-    transform: scale(0.95);
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--secondary);
 }
 
 .icon-wrapper {
@@ -379,6 +413,92 @@ body {
     font-weight: 500;
 }
 
+/* Prayer Times Section */
+.prayer-times-section {
+    margin-bottom: 32px;
+}
+
+.prayer-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding: 10px 4px 20px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.prayer-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.prayer-card {
+    min-width: 100px;
+    flex: 1;
+    background: var(--bg-card);
+    border-radius: 18px;
+    padding: 16px 12px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.prayer-card.highlight {
+    background: var(--primary);
+    border-color: var(--secondary);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(var(--primary-rgb), 0.3);
+}
+
+.prayer-card.highlight::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top right, rgba(197, 160, 89, 0.2), transparent 70%);
+}
+
+.prayer-name {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.prayer-card.highlight .prayer-name {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.prayer-time {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.prayer-card.highlight .prayer-time {
+    color: white;
+}
+
+.prayer-icon {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    color: var(--secondary);
+    display: block;
+}
+
+.prayer-card.highlight .prayer-icon {
+    color: var(--secondary);
+    filter: drop-shadow(0 0 5px rgba(197, 160, 89, 0.5));
+}
+
 /* Scroll Containers */
 .scroll-container {
     display: flex;
@@ -394,21 +514,25 @@ body {
 
 /* Data Cards */
 .kajian-card {
-    min-width: 240px;
-    background: var(--bg-sidebar);
-    border-radius: var(--radius-md);
-    padding: 16px;
-    box-shadow: var(--shadow-sm);
+    min-width: 280px;
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow-md);
     flex-shrink: 0;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
 }
 
 .card-tag {
     display: inline-block;
-    padding: 4px 8px;
-    border-radius: 6px;
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
     font-size: 0.7rem;
     font-weight: 600;
-    margin-bottom: 10px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .tag-rutin {
@@ -422,321 +546,368 @@ body {
 }
 
 .kajian-card h4 {
-    font-size: 1rem;
-    margin-bottom: 6px;
-    line-height: 1.3;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    line-height: 1.25;
+    color: var(--primary);
 }
 
-.kajian-card p {
-    font-size: 0.8rem;
+.card-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.card-details p {
+    font-size: 0.85rem;
     color: var(--text-muted);
     display: flex;
     align-items: center;
-    gap: 6px;
-    margin-bottom: 6px;
+    gap: 10px;
+    margin: 0;
 }
 
-/* Map Navigation Button - Home Cards */
-.btn-map-home {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 8px;
-    padding: 6px 14px;
-    background: var(--bg-accent-green);
-    color: var(--primary);
-    border: 1px solid rgba(var(--primary-rgb), 0.15);
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    font-family: inherit;
-    text-decoration: none;
-    transition: var(--transition);
-}
-
-.btn-map-home:hover {
-    background: var(--primary);
-    color: var(--text-on-primary);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.25);
-}
-
-.btn-map-home i {
-    font-size: 0.85rem;
-}
-
-/* Map Navigation Button - Kajian List */
-.btn-map-nav {
-    background: var(--bg-accent-green) !important;
-    color: var(--primary) !important;
-    padding: 5px 12px !important;
-    border-radius: 20px !important;
-    font-size: 0.75rem !important;
-    border: 1px solid rgba(var(--primary-rgb), 0.12) !important;
-    white-space: nowrap;
-}
-
-.btn-map-nav:hover {
-    background: var(--primary) !important;
-    color: var(--text-on-primary) !important;
-    transform: translateY(-1px);
-    box-shadow: 0 3px 10px rgba(var(--primary-rgb), 0.2);
-}
-
-/* Page Headers */
-.page-header {
-    margin-bottom: 24px;
-}
-
-.page-header h2 {
-    font-size: 1.5rem;
-    color: var(--primary);
-    margin-bottom: 4px;
-}
-
-.page-header p {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-}
-
-.page-header.center {
+.card-details p i {
+    width: 20px;
+    color: var(--secondary);
+    font-size: 1rem;
     text-align: center;
 }
 
-.filter-tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    overflow-x: auto;
-    padding-bottom: 5px;
-}
-
-.filter-btn {
-    padding: 8px 16px;
-    border: none;
-    background: var(--bg-sidebar);
-    border-radius: 20px;
-    color: var(--text-muted);
-    font-family: inherit;
-    font-weight: 500;
-    cursor: pointer;
-    white-space: nowrap;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
-    transition: var(--transition);
-}
-
-.filter-btn.active {
-    background: var(--primary);
-    color: var(--text-on-primary);
-}
-
-/* List Container (Vertical Cards) */
+/* Page Components */
 .list-container {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
 }
 
 .horizontal-card {
     display: flex;
-    background: var(--bg-sidebar);
-    border-radius: var(--radius-md);
-    padding: 16px;
-    gap: 16px;
+    flex-direction: column;
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
     box-shadow: var(--shadow-sm);
-    align-items: center;
+    border: 1px solid var(--border-color);
     transition: var(--transition);
 }
 
+.horizontal-card-body {
+    display: flex;
+    padding: 20px;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.horizontal-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--secondary);
+}
+
 .horizontal-card.past-kajian {
-    opacity: 0.6;
-    background: var(--bg-main);
+    opacity: 0.7;
     filter: grayscale(0.5);
-    border: 1px dashed var(--border-color);
-    box-shadow: none;
-}
-
-.horizontal-card.past-kajian .date-box {
-    background: var(--bg-accent-gray);
-    color: var(--text-muted);
-}
-
-.horizontal-card.past-kajian .card-info h4 {
-    color: var(--text-muted);
+    background: var(--bg-main);
+    border-style: dashed;
 }
 
 .date-box {
     background: var(--bg-accent-green);
-    color: var(--text-accent-green);
-    width: 60px;
-    height: 60px;
-    border-radius: 12px;
+    color: var(--primary);
+    width: 70px;
+    height: 70px;
+    border-radius: 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    border: 1px solid rgba(var(--primary-rgb), 0.1);
 }
 
 .date-box .day {
-    font-size: 0.75rem;
-    font-weight: 500;
+    font-size: 0.7rem;
+    font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
 }
 
 .date-box .num {
-    font-size: 1.25rem;
-    font-weight: 700;
-    line-height: 1.1;
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1;
 }
 
-.horizontal-card .card-info h4 {
-    font-size: 1rem;
-    margin-bottom: 4px;
+.card-info {
+    flex: 1;
 }
 
-.horizontal-card .card-info p {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    margin-bottom: 2px;
+/* --- Badge Variations --- */
+.badge-gold {
+    background: var(--secondary) !important;
+    color: #1A1F1B !important; /* Always use dark text on gold for maximum contrast */
 }
 
-/* Grid Container */
+.badge-info {
+    background: var(--bg-accent-blue) !important;
+    color: var(--text-accent-blue) !important;
+}
+
+.badge-success {
+    background: var(--bg-accent-green) !important;
+    color: var(--text-accent-green) !important;
+}
+
+.badge-warning {
+    background: var(--bg-accent-orange) !important;
+    color: var(--text-accent-orange) !important;
+}
+
+/* --- SECTION: EVENTS --- */
 .grid-container {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 24px;
+}
+
+@media (min-width: 768px) {
+    .grid-container {
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    }
 }
 
 .event-card {
-    background: var(--bg-sidebar);
-    border-radius: var(--radius-md);
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.event-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--secondary);
+}
+
+.card-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    background: rgba(var(--primary-rgb), 0.02);
+}
+
+/* Event Card Specific Footer logic */
+.event-card .card-footer {
+    justify-content: space-between;
 }
 
 .event-img {
-    height: 140px;
-    background-color: var(--bg-accent-gray);
+    height: 220px;
     background-size: cover;
     background-position: center;
     position: relative;
+    cursor: zoom-in;
 }
 
 .event-date-badge {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    background: var(--bg-card);
-    backdrop-filter: blur(4px);
-    padding: 4px 8px;
-    border-radius: 8px;
+    top: 20px;
+    right: 20px;
+    background: var(--primary);
+    color: white;
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
     font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--primary);
+    font-weight: 700;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    backdrop-filter: blur(8px);
 }
 
 .event-info {
-    padding: 16px;
+    padding: 24px;
 }
 
 .event-info h4 {
-    font-size: 1.1rem;
-    margin-bottom: 8px;
+    color: var(--primary);
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    letter-spacing: -0.03em;
 }
 
 .event-info p {
-    font-size: 0.85rem;
     color: var(--text-muted);
-    line-height: 1.4;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 4px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 16px;
 }
 
-/* Khataman Section */
-.quran-icon {
-    font-size: 3rem;
+.event-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-top: 12px;
+}
+
+.event-meta i {
     color: var(--secondary);
-    margin-bottom: 12px;
+}
+
+.event-actions {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    background: rgba(var(--primary-rgb), 0.02);
+}
+
+/* Progress Section */
+.quran-icon {
+    font-size: 4rem;
+    color: var(--secondary);
+    margin-bottom: 24px;
+    filter: drop-shadow(0 4px 15px rgba(197, 160, 89, 0.4));
 }
 
 .progress-container {
-    background: var(--bg-sidebar);
-    padding: 20px;
-    border-radius: var(--radius-md);
-    margin-bottom: 24px;
-    box-shadow: var(--shadow-sm);
+    background: var(--bg-card);
+    padding: 30px;
+    border-radius: var(--radius-lg);
+    margin-bottom: 32px;
+    box-shadow: var(--shadow-md);
     border: 1px solid var(--border-color);
 }
 
+.progress-header {
+    margin-bottom: 24px;
+}
+
 .progress-bar-wrapper {
-    height: 8px;
+    height: 10px;
     background: var(--bg-accent-gray);
-    border-radius: 4px;
+    border-radius: var(--radius-full);
     overflow: hidden;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 .progress-fill {
     height: 100%;
-    background: var(--primary);
-    border-radius: 4px;
-    transition: width 1s ease-out;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+    border-radius: var(--radius-full);
+    transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .progress-text {
     font-size: 0.85rem;
     color: var(--text-muted);
     text-align: right;
-    font-weight: 500;
+    font-weight: 600;
+}
+
+/* Kajian Filtering Tabs */
+.filter-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+}
+
+.filter-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.filter-btn {
+    padding: 10px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.filter-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.filter-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2);
 }
 
 .juz-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
     gap: 12px;
 }
 
 .juz-item {
-    background: var(--bg-sidebar);
-    border-radius: 12px;
+    background: var(--bg-card);
+    border-radius: 16px;
     text-align: center;
-    padding: 12px 8px;
+    padding: 16px 10px;
     box-shadow: var(--shadow-sm);
-    border: 1px solid transparent;
+    border: 1.5px solid var(--border-color);
     cursor: pointer;
     transition: var(--transition);
 }
 
-.juz-item:not(.taken) {
-    cursor: pointer;
+.juz-num {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--primary);
+}
+
+.juz-status {
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
 }
 
 .juz-item:not(.taken):hover {
     background: var(--bg-accent-green);
     border-color: var(--primary);
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
 }
 
 .juz-item.taken {
     background: var(--bg-accent-green);
     border-color: var(--primary-light);
-    cursor: default;
-}
-
-.juz-item.finished {
-    background: var(--bg-accent-green);
-    border-color: var(--primary);
-    cursor: default;
     color: var(--primary);
 }
 
-.juz-item.finished .juz-num {
+.juz-item.finished {
     background: var(--primary);
-    color: var(--text-on-primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.juz-item.finished .juz-num,
+.juz-item.finished .juz-status {
+    color: white;
 }
 
 
@@ -995,25 +1166,25 @@ body.role-user .superadmin-only {
 /* Skeletons */
 .skeleton-card {
     background: var(--bg-skeleton);
-    border-radius: var(--radius-md);
-    min-width: 240px;
-    height: 120px;
+    border-radius: var(--radius-lg);
+    min-width: 280px;
+    height: 240px;
     animation: pulse 1.5s infinite;
 }
 
 .skeleton-card.horizontal {
-    height: 90px;
+    height: 110px;
     width: 100%;
 }
 
 .skeleton-card.large {
-    height: 220px;
+    height: 380px;
     width: 100%;
 }
 
 .juz-skeleton {
     height: 70px;
-    border-radius: 12px;
+    border-radius: 16px;
     background: var(--bg-skeleton);
     animation: pulse 1.5s infinite;
 }
@@ -1155,26 +1326,26 @@ body.role-user .superadmin-only {
     .desktop-nav {
         display: flex;
         flex-direction: column;
-        width: 260px;
+        width: 280px;
         background: var(--bg-sidebar);
         height: 100%;
-        padding: 30px 20px;
+        padding: 40px 24px;
         border-right: 1px solid var(--border-color);
         z-index: 10;
         box-shadow: var(--shadow-sm);
     }
 
     .desktop-nav .logo {
-        font-size: 1.5rem;
-        margin-bottom: 50px;
-        padding-left: 10px;
+        font-size: 1.4rem;
+        margin-bottom: 60px;
+        padding-left: 12px;
     }
 
     .nav-links {
         list-style: none;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 12px;
     }
 
     .desktop-nav .nav-item {
@@ -1182,16 +1353,17 @@ body.role-user .superadmin-only {
         align-items: center;
         gap: 16px;
         padding: 14px 20px;
-        border-radius: 12px;
+        border-radius: 16px;
         color: var(--text-muted);
         font-weight: 500;
-        font-size: 1.05rem;
+        font-size: 1rem;
         cursor: pointer;
         transition: var(--transition);
+        border: 1px solid transparent;
     }
 
     .desktop-nav .nav-item i {
-        font-size: 1.25rem;
+        font-size: 1.2rem;
         width: 24px;
         text-align: center;
     }
@@ -1199,81 +1371,96 @@ body.role-user .superadmin-only {
     .desktop-nav .nav-item:hover {
         background: var(--bg-main);
         color: var(--text-main);
+        padding-left: 24px;
     }
 
     .desktop-nav .nav-item.active {
         background: var(--bg-accent-green);
         color: var(--primary);
-        font-weight: 600;
+        font-weight: 700;
+        border-color: var(--border-color);
     }
 
     .content-area {
         flex: 1;
-        padding: 40px;
+        padding: 60px;
         overflow-y: auto;
-        padding-bottom: 40px;
-        /* Reset mobile padding */
+        padding-bottom: 60px;
     }
 
     #app-container {
-        max-width: 900px;
+        max-width: 1000px;
         margin: 0 auto;
         padding: 0;
     }
+}
 
-    .quick-stats {
-        gap: 24px;
+/* Mobile Specific Refinements */
+@media (max-width: 480px) {
+    .progress-header {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center;
+        gap: 16px;
     }
 
-    .grid-container {
-        grid-template-columns: repeat(2, 1fr);
+    .progress-header .admin-only {
+        width: 100%;
     }
 
-    .filter-tabs {
-        margin-bottom: 30px;
+    .khataman-actions {
+        width: 100%;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .khataman-actions button {
+        width: 100% !important;
+        justify-content: center;
+        font-size: 0.8rem;
     }
 }
 
 /* --- Data Master / Jamaah Refinement --- */
 .jamaah-card {
-    background: var(--bg-sidebar);
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 15px;
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 16px;
     box-shadow: var(--shadow-sm);
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 20px;
     border: 1px solid var(--border-color);
     transition: var(--transition);
 }
 
 .jamaah-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-4px);
     box-shadow: var(--shadow-md);
+    border-color: var(--secondary);
 }
 
 .jamaah-avatar {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     background: var(--bg-accent-green);
     color: var(--primary);
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     flex-shrink: 0;
-}
-
-.jamaah-main-info {
-    flex: 1;
+    border: 2px solid var(--border-color);
 }
 
 .jamaah-main-info h4 {
-    margin: 0 0 4px 0;
-    font-size: 1.1rem;
-    color: var(--text-main);
+    margin: 0 0 6px 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary);
 }
 
 .jamaah-meta {
@@ -1281,94 +1468,36 @@ body.role-user .superadmin-only {
     color: var(--text-muted);
 }
 
-.jamaah-meta span {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    margin-right: 15px;
-}
-
-/* --- Khataman Taker Names --- */
-.juz-item.taken .juz-status {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--primary);
-    padding: 0 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-}
-
-/* --- Role-based Visibility --- */
-.admin-only, .superadmin-only {
-    display: none !important;
-}
-
-body.role-admin .admin-only {
-    display: inline-flex !important;
-}
-body.role-admin div.admin-only {
-    display: flex !important;
-}
-/* Special case for sections */
-body.role-admin section.admin-only {
-    display: none !important;
-}
-body.role-admin section.admin-only.active-section {
-    display: block !important;
-}
-
-body.role-superadmin .admin-only,
-body.role-superadmin .superadmin-only {
-    display: inline-flex !important;
-}
-
-body.role-superadmin div.admin-only,
-body.role-superadmin div.superadmin-only {
-    display: flex !important;
-}
-/* Special case for sections */
-body.role-superadmin section.admin-only,
-body.role-superadmin section.superadmin-only {
-    display: none !important;
-}
-body.role-superadmin section.admin-only.active-section,
-body.role-superadmin section.superadmin-only.active-section {
-    display: block !important;
-}
-
-/* Live Sync Indicator */
+/* --- Live Sync Indicator --- */
 .sync-indicator {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 6px 12px;
-    background: rgba(var(--primary-rgb), 0.1);
-    border-radius: 20px;
+    padding: 8px 16px;
+    background: rgba(var(--primary-rgb), 0.05);
+    border-radius: var(--radius-full);
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--primary);
-    margin-top: 10px;
+    letter-spacing: 0.02em;
 }
 
 .sync-indicator .dot {
-    width: 6px;
-    height: 6px;
-    background: var(--primary);
+    width: 8px;
+    height: 8px;
+    background: #04BD7A;
     border-radius: 50%;
     position: relative;
-    box-shadow: 0 0 10px var(--primary);
 }
 
 .sync-indicator .ping {
     position: absolute;
-    width: 6px;
-    height: 6px;
-    background: var(--primary);
+    width: 8px;
+    height: 8px;
+    background: #04BD7A;
     border-radius: 50%;
-    animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
-    opacity: 0.75;
+    animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    opacity: 0.8;
 }
 
 @keyframes ping {
@@ -1378,12 +1507,35 @@ body.role-superadmin section.superadmin-only.active-section {
     }
 }
 
-.mobile-header .sync-indicator {
-    margin-top: 0;
-    padding: 4px 10px;
-    background: transparent;
+/* --- Role-based Visibility --- */
+.admin-only, .superadmin-only {
+    display: none !important;
 }
 
-.mobile-header .sync-indicator .status-text {
-    display: none; /* Hide text on mobile header to save space */
+/* Allow display if role is correct, but ONLY for non-section elements */
+body.role-admin .admin-only:not(.view-section) {
+    display: inline-flex !important;
+}
+body.role-admin div.admin-only:not(.view-section), 
+body.role-admin .admin-only.flex:not(.view-section) {
+    display: flex !important;
+}
+
+body.role-superadmin .admin-only:not(.view-section),
+body.role-superadmin .superadmin-only:not(.view-section) {
+    display: inline-flex !important;
+}
+
+body.role-superadmin div.admin-only:not(.view-section),
+body.role-superadmin div.superadmin-only:not(.view-section),
+body.role-superadmin .admin-only.flex:not(.view-section),
+body.role-superadmin .superadmin-only.flex:not(.view-section) {
+    display: flex !important;
+}
+
+/* Special case for sections: ONLY SHOW if both role is correct AND it is the active section */
+body.role-admin section.admin-only.active-section,
+body.role-superadmin section.admin-only.active-section,
+body.role-superadmin section.superadmin-only.active-section {
+    display: block !important;
 }
