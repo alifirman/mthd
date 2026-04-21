@@ -37,6 +37,10 @@ const showMsg = (title, text, icon = 'info') => {
         text,
         icon,
         confirmButtonColor: 'var(--primary)',
+        customClass: {
+            popup: 'premium-swal-popup',
+            confirmButton: 'premium-swal-button'
+        },
         heightAuto: false
     });
 };
@@ -48,9 +52,14 @@ const showConfirm = (title, text, confirmText = 'Ya, Lanjutkan') => {
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: 'var(--primary)',
-        cancelButtonColor: '#aaa',
+        cancelButtonColor: 'var(--text-muted)',
         confirmButtonText: confirmText,
         cancelButtonText: 'Batal',
+        customClass: {
+            popup: 'premium-swal-popup',
+            confirmButton: 'premium-swal-button',
+            cancelButton: 'premium-swal-cancel'
+        },
         heightAuto: false
     });
 };
@@ -61,7 +70,9 @@ const toast = (title, icon = 'success') => {
         position: 'top-end',
         showConfirmButton: false,
         timer: 3000,
-        timerProgressBar: true
+        timerProgressBar: true,
+        background: 'var(--bg-card)',
+        color: 'var(--text-main)'
     });
     Toast.fire({ icon, title });
 };
@@ -198,9 +209,12 @@ function renderHomeKajianCards(data) {
             <div class="kajian-card">
                 <span class="card-tag ${tagClass}">${tagText}</span>
                 <h4>${item.title}</h4>
-                <p><i class="fa-solid fa-user"></i> ${item.ustadz}</p>
-                <p><i class="fa-regular fa-clock"></i> ${formatDateToIndonesian(item.date)} - ${item.time}</p>
-                ${locationHtml}
+                <div class="card-details">
+                    <p><i class="fa-solid fa-user-tie"></i> ${item.ustadz}</p>
+                    <p><i class="fa-solid fa-clock"></i> ${formatDateToIndonesian(item.date)}</p>
+                    <p><i class="fa-solid fa-hourglass-start"></i> ${item.time}</p>
+                    ${locationHtml}
+                </div>
                 ${mapBtnHtml}
             </div>
         `;
@@ -288,32 +302,36 @@ function renderKajianList(data) {
         let actionButtons = '';
         if (isEditingAllowed) {
             actionButtons = `
-                <div class="admin-only" style="margin-left:auto; display:flex; gap:8px;">
-                    <button class="btn-action" style="background:#E8F0FE; color:#1A73E8; padding: 4px 8px;" onclick="editKajian(${item.id})"><i class="fa-solid fa-pen"></i></button>
-                    <button class="btn-action" style="background:#FFF4E5; color:#E67E22; padding: 4px 8px;" onclick="deleteKajian(${item.id})"><i class="fa-solid fa-trash"></i></button>
+                <div class="admin-only" style="display:flex; gap:8px;">
+                    <button class="btn-action badge-info" onclick="editKajian(${item.id})"><i class="fa-solid fa-pen"></i> Edit</button>
+                    <button class="btn-action badge-warning" onclick="deleteKajian(${item.id})"><i class="fa-solid fa-trash"></i> Hapus</button>
                 </div>
             `;
         }
 
-        const locationHtml = item.location ? `<p style="font-size: 0.85rem; margin-top: 2px;"><i class="fa-solid fa-location-dot" style="color:var(--primary); width:16px;"></i> ${item.location}</p>` : '';
-        const mapBtnHtml = item.mapurl ? `<a href="${item.mapurl}" target="_blank" class="btn-action btn-map-nav" style="text-decoration:none;"><i class="fa-solid fa-map-location-dot"></i> Navigasi</a>` : '';
+        const locationHtml = item.location ? `<p style="font-size: 0.85rem; margin-top: 4px;"><i class="fa-solid fa-map-pin" style="color:var(--secondary); width:20px;"></i> ${item.location}</p>` : '';
+        const mapBtnHtml = item.mapurl ? `<a href="${item.mapurl}" target="_blank" class="btn-map-nav" style="text-decoration:none; padding: 6px 14px; background: var(--bg-accent-green); color: var(--primary); border-radius: 20px; font-size: 0.75rem; font-weight: 600;"><i class="fa-solid fa-diamond-turn-right"></i> Navigasi</a>` : '';
 
         const cardHtml = `
-            <div class="horizontal-card ${extraClass}" style="align-items: flex-start;">
-                <div class="date-box">
-                    <span class="day">${dateInfo.day}</span>
-                    <span class="num">${dateInfo.num}</span>
-                </div>
-                <div class="card-info" style="flex:1;">
-                    <div style="display:flex; justify-content:space-between; align-items: flex-start;">
-                        <h4 style="margin:0;">${item.title} ${isPast ? '<span style="font-size:0.7rem; background:#eee; padding:2px 6px; border-radius:4px; vertical-align:middle; margin-left:5px;">Selesai</span>' : ''}</h4>
-                        ${mapBtnHtml}
+            <div class="horizontal-card ${extraClass}">
+                <div class="horizontal-card-body">
+                    <div class="date-box">
+                        <span class="day">${dateInfo.day}</span>
+                        <span class="num">${dateInfo.num}</span>
                     </div>
-                    <p><i class="fa-solid fa-user" style="color:var(--primary); width:16px;"></i> ${item.ustadz}</p>
-                    <p><i class="fa-regular fa-clock" style="color:var(--primary); width:16px;"></i> ${item.time}</p>
-                    ${locationHtml}
+                    <div class="card-info">
+                        <h4 style="margin:0 0 8px 0; font-weight: 700; color: var(--primary); font-size:1.15rem;">${item.title} ${isPast ? '<span class="badge">Selesai</span>' : ''}</h4>
+                        <div class="card-details">
+                            <p><i class="fa-solid fa-user-tie"></i> ${item.ustadz}</p>
+                            <p><i class="fa-solid fa-clock"></i> ${item.time}</p>
+                            ${locationHtml}
+                        </div>
+                    </div>
                 </div>
-                ${actionButtons}
+                <div class="card-footer">
+                    ${mapBtnHtml}
+                    ${actionButtons}
+                </div>
             </div>
         `;
         list.insertAdjacentHTML('beforeend', cardHtml);
@@ -400,34 +418,36 @@ function renderEventList(data) {
         let actionBtns = '';
         if (isSuperAdmin) {
             actionBtns = `
-                <div class="superadmin-only" style="padding: 10px 16px; display:flex; gap:10px; justify-content: flex-end; border-top: 1px solid rgba(0,0,0,0.05);">
-                    <button class="btn-action" style="background:#E8F0FE; color:#1A73E8; padding: 6px 12px; border-radius: 8px;" onclick="editEvent(${item.id})"><i class="fa-solid fa-pen"></i> Edit</button>
-                    <button class="btn-action" style="background:#FFF4E5; color:#E67E22; padding: 6px 12px; border-radius: 8px;" onclick="deleteEvent(${item.id})"><i class="fa-solid fa-trash"></i> Hapus</button>
+                <div class="event-actions">
+                    <button class="btn-action badge-info" onclick="editEvent(${item.id})"><i class="fa-solid fa-pen"></i> Edit</button>
+                    <button class="btn-action badge-warning" onclick="deleteEvent(${item.id})"><i class="fa-solid fa-trash"></i> Hapus</button>
                 </div>
             `;
         }
 
-        const eventLocationHtml = item.location ? `<p style="color: var(--text-muted); font-size: 0.9rem; display:flex; align-items:center; gap:6px; margin-top:8px;"><i class="fa-solid fa-location-dot" style="color:var(--primary);"></i> ${item.location}</p>` : '';
-        const eventMapBtnHtml = item.mapurl ? `<a href="${item.mapurl}" target="_blank" class="btn-action btn-map-nav" style="text-decoration:none; margin-top:10px;"><i class="fa-solid fa-map-location-dot"></i> Navigasi</a>` : '';
+        const eventLocationHtml = item.location ? `<div class="event-meta"><i class="fa-solid fa-location-dot"></i> ${item.location}</div>` : '';
+        const eventMapBtnHtml = item.mapurl ? `<a href="${item.mapurl}" target="_blank" class="btn-action badge-success" style="text-decoration:none; margin-top:10px;"><i class="fa-solid fa-map-location-dot"></i> Navigasi</a>` : '';
         const bgUrl = getDirectImageUrl(item.image, true);
         const openUrl = getDirectImageUrl(item.image, false);
 
         const cardHtml = `
-            <div class="event-card" style="margin-bottom: 20px; border-radius: 16px; overflow: hidden; background: var(--bg-card); box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative;">
+            <div class="event-card">
                 <div class="event-img" 
                      onclick="window.open('${openUrl}', '_blank')"
-                     style="background-image: url('${bgUrl}'); height: 180px; background-size: cover; background-position: center; cursor: zoom-in; position: relative;">
-                    <span class="event-date-badge" style="position: absolute; top: 15px; right: 15px; background: var(--primary); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+                     style="background-image: url('${bgUrl}')">
+                    <span class="event-date-badge">
                         ${item.date ? formatDateToIndonesian(item.date) : ''}
                     </span>
                 </div>
-                <div class="event-info" style="padding: 20px;">
-                    <h4 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 8px;">${item.title}</h4>
-                    <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;">${item.desc || ''}</p>
+                <div class="event-info">
+                    <h4>${item.title}</h4>
+                    <p>${item.desc || ''}</p>
                     ${eventLocationHtml}
-                    ${eventMapBtnHtml}
                 </div>
-                ${actionBtns}
+                <div class="card-footer">
+                    ${eventMapBtnHtml}
+                    ${actionBtns}
+                </div>
             </div>
         `;
         list.insertAdjacentHTML('beforeend', cardHtml);
@@ -450,13 +470,11 @@ function renderKhatamanGrid(data) {
     if (phaseBadge) {
         if (data.phase === 'TAKING') {
             phaseBadge.textContent = 'Fase Pengambilan';
-            phaseBadge.style.background = '#E8F5EE';
-            phaseBadge.style.color = '#025C3C';
+            phaseBadge.className = 'badge badge-success';
             if (toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-lock"></i> Tutup Sesi Pengambilan';
         } else {
             phaseBadge.textContent = 'Fase Membaca';
-            phaseBadge.style.background = '#E8F0FE';
-            phaseBadge.style.color = '#1A73E8';
+            phaseBadge.className = 'badge badge-info';
             if (toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i> Buka Sesi Pengambilan';
         }
     }
@@ -496,7 +514,7 @@ function renderKhatamanGrid(data) {
             if (data.phase === 'READING' && isOwner) {
                 statusText = `<div style="display:flex; flex-direction:column; gap:2px; align-items:center;">
                                 <span style="font-size:0.8rem; font-weight:600;">${info.takenBy}</span>
-                                <span style="font-size:0.65rem; background:#025C3C; color:white; padding:1px 6px; border-radius:10px;"><i class="fa-solid fa-check"></i> Selesai?</span>
+                                <span style="font-size:0.65rem; background: var(--primary); color:white; padding:1px 6px; border-radius:10px;"><i class="fa-solid fa-check"></i> Selesai?</span>
                               </div>`;
                 action = `onclick="finishJuzReading(${i})" style="cursor:pointer; border: 2px solid var(--primary); transform: scale(1.05); z-index: 2;"`;
             } else {
@@ -540,7 +558,7 @@ function renderKhatamanGrid(data) {
             const isAdmin = session && (session.role === 'admin' || session.role === 'superadmin');
             if (finishedCount === 30 && isAdmin && archiveContainer) {
                 archiveContainer.innerHTML = `
-                    <button class="btn-action" onclick="archiveKhataman()" style="background: var(--primary); color: white; width: 100%; padding: 12px; font-weight: 600; border-radius: 12px; box-shadow: 0 4px 15px rgba(2,92,60,0.2); display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <button class="btn-action btn-primary" onclick="archiveKhataman()" style="width: 100%; padding: 14px; border-radius: 16px; box-shadow: var(--shadow-md);">
                         <i class="fa-solid fa-cloud-arrow-up"></i> Selesaikan & Simpan Khataman
                     </button>
                 `;
@@ -827,19 +845,19 @@ function renderJamaahList(data) {
                 <div class="jamaah-avatar">
                     <span>${initial}</span>
                 </div>
-                <div class="jamaah-main-info">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                <div class="jamaah-main-info" style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
                         <h4 style="margin:0;">${item.name}</h4>
                         <span class="role-badge ${roleClass}">${roleLabel}</span>
                     </div>
-                    <div class="jamaah-meta">
-                        <span><i class="fa-solid fa-phone"></i> ${item.phone}</span>
-                        <span><i class="fa-solid fa-location-dot"></i> ${item.address || '-'}</span>
+                    <div class="jamaah-meta" style="display: flex; gap: 16px;">
+                        <span><i class="fa-solid fa-phone" style="color: var(--secondary);"></i> ${item.phone}</span>
+                        <span><i class="fa-solid fa-map-location-dot" style="color: var(--secondary);"></i> ${item.address || '-'}</span>
                     </div>
                 </div>
-                <div class="admin-actions" style="display: flex; gap: 8px;">
-                    <button class="btn-action" style="background:#E8F0FE; color:#1A73E8; padding: 8px 12px; border-radius: 8px;" onclick="editJamaah(${item.id})"><i class="fa-solid fa-pen"></i></button>
-                    <button class="btn-action" style="background:#FFF4E5; color:#E67E22; padding: 8px 12px; border-radius: 8px;" onclick="deleteJamaah(${item.id})"><i class="fa-solid fa-trash"></i></button>
+                <div class="admin-actions" style="display: flex; gap: 10px; margin-left: auto;">
+                    <button class="btn-action" style="background: var(--bg-accent-blue); color: var(--text-accent-blue); width: 44px; height: 44px; justify-content: center; border-radius: 12px;" onclick="editJamaah(${item.id})"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button class="btn-action" style="background: var(--bg-accent-orange); color: var(--text-accent-orange); width: 44px; height: 44px; justify-content: center; border-radius: 12px;" onclick="deleteJamaah(${item.id})"><i class="fa-solid fa-trash-can"></i></button>
                 </div>
             </div>
         `;
@@ -1304,6 +1322,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Ping activity immediately on load if logged in
+    logUserActivity();
+
+    // Init Prayer Times
+    initPrayerTimes();
 });
 
 // Auto-Refresh Polling (Realtime Updates)
@@ -1315,3 +1339,108 @@ setInterval(() => {
         initApp();
     }
 }, 15000); // 15000 ms = 15 detik
+
+// --- JADWAL SHOLAT LOGIC ---
+async function initPrayerTimes() {
+    const prayerList = document.getElementById('prayer-times-list');
+    const locationText = document.getElementById('prayer-location');
+
+    // Default to Jakarta
+    let coords = { lat: -6.2088, lon: 106.8456 };
+    let locationLabel = "Jakarta, ID";
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                if (locationText) locationText.innerHTML = `<i class="fa-solid fa-location-dot"></i> Lokasi Terdeteksi`;
+                await fetchPrayerTimes(lat, lon, "Lokasi Anda");
+            },
+            async (error) => {
+                console.warn("Geolocation denied, using default Jakarta.");
+                if (locationText) locationText.innerHTML = `<i class="fa-solid fa-location-dot"></i> Jakarta (Default)`;
+                await fetchPrayerTimes(coords.lat, coords.lon, "Jakarta");
+            }
+        );
+    } else {
+        await fetchPrayerTimes(coords.lat, coords.lon, "Jakarta");
+    }
+}
+
+async function fetchPrayerTimes(lat, lon, label) {
+    try {
+        const date = new Date().toISOString().split('T')[0];
+        // Method 20 = Kemenag RI
+        const response = await fetch(`https://api.aladhan.com/v1/timings/${Math.floor(Date.now()/1000)}?latitude=${lat}&longitude=${lon}&method=20`);
+        const result = await response.json();
+        
+        if (result.code === 200) {
+            renderPrayerTimes(result.data.timings);
+        }
+    } catch (error) {
+        console.error("Gagal mengambil jadwal sholat:", error);
+        const prayerList = document.getElementById('prayer-times-list');
+        if (prayerList) prayerList.innerHTML = '<p style="font-size:0.8rem; color:var(--text-muted); padding:10px;">Gagal memuat jadwal sholat.</p>';
+    }
+}
+
+function renderPrayerTimes(timings) {
+    const list = document.getElementById('prayer-times-list');
+    if (!list) return;
+
+    // Filter relevant prayers
+    const relevant = [
+        { name: 'Subuh', time: timings.Fajr, icon: 'fa-cloud-meatball' },
+        { name: 'Terbit', time: timings.Sunrise, icon: 'fa-sun' },
+        { name: 'Dzuhur', time: timings.Dhuhr, icon: 'fa-solid fa-sun' },
+        { name: 'Ashar', time: timings.Asr, icon: 'fa-cloud-sun' },
+        { name: 'Maghrib', time: timings.Maghrib, icon: 'fa-moon' },
+        { name: 'Isya', time: timings.Isha, icon: 'fa-solid fa-moon' }
+    ];
+
+    // Find next prayer
+    const now = new Date();
+    const currTimeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    let nextIndex = relevant.findIndex(p => p.time > currTimeStr);
+    if (nextIndex === -1) nextIndex = 0; // If all passed, next is Subuh tomorrow
+
+    list.innerHTML = '';
+    relevant.forEach((prayer, index) => {
+        const isNext = index === nextIndex;
+        const cardHtml = `
+            <div class="prayer-card ${isNext ? 'highlight' : ''}">
+                <i class="prayer-icon fa-solid ${prayer.icon}"></i>
+                <span class="prayer-name">${prayer.name}</span>
+                <span class="prayer-time">${prayer.time}</span>
+            </div>
+        `;
+        list.insertAdjacentHTML('beforeend', cardHtml);
+    });
+
+    // Auto-scroll to highlight if active
+    const highlighted = list.querySelector('.highlight');
+    if (highlighted) {
+        setTimeout(() => {
+            highlighted.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }, 500);
+    }
+}
+
+// User Activity Polling
+function logUserActivity() {
+    if (session && session.isLoggedIn && session.id) {
+        // Optimistically update our own state if available
+        if (globalJamaahData.length > 0) {
+            const me = globalJamaahData.find(j => j.id == session.id);
+            if (me) me.lastActivity = new Date().toISOString();
+        }
+
+        // Fire & forget ping to server
+        const pingUrl = `${GOOGLE_SHEET_API_URL}?action=logActivity&id=${session.id}&t=${new Date().getTime()}`;
+        fetch(pingUrl, { mode: 'no-cors' }).catch(e => console.error("Gagal ping aktivitas:", e));
+    }
+}
+// Ping setiap 2 menit
+setInterval(logUserActivity, 120000);
+
